@@ -1,0 +1,9 @@
+﻿<Application x:Class="CalculatorTestProject.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:CalculatorTestProject"
+             StartupUri="/Boundary/CalculatorWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
