@@ -39,6 +39,14 @@ namespace CalculatorProject
             //Programer Mode
 
             //Scientific Mode
+            Calculator.IsDegree = true;
+            result_lbl.Content = Calculator.Calculate("sin( 75 )");
+            result_lbl.Content = Calculator.Calculate("cos( 60 )");
+            result_lbl.Content = Calculator.Calculate("tan( 80 )");
+            Calculator.IsDegree = false;
+            result_lbl.Content = Calculator.Calculate("sin( 0.5 * π )");
+            result_lbl.Content = Calculator.Calculate("cos( 2 / 3 * π )");
+            result_lbl.Content = Calculator.Calculate("tan( π )");
             result_lbl.Content = Calculator.Calculate("1 / ( 2 * π )");
             result_lbl.Content = Calculator.Calculate("1 / abs( 2 - 5 )");
             result_lbl.Content = Calculator.Calculate("abs( 2 - 10 )");
@@ -61,7 +69,7 @@ namespace CalculatorProject
             result_lbl.Content = Calculator.Calculate("e");
 
         }
-        
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var rand = new Random(); 

@@ -24,6 +24,13 @@ namespace CalculatorProject.Control
         /// </returns>
         public static double CalculateFunction(string function, double number)
         {
+            // If the function is a trigonometric function
+            if((function == CalculatorParams.SIN_FUNC ||
+                function == CalculatorParams.COS_FUNC ||
+                function == CalculatorParams.TAN_FUNC) && Calculator.IsDegree)
+            {
+                number = number * Math.PI / 180;
+            }
             switch (function)
             {
                 case CalculatorParams.SIN_FUNC:
