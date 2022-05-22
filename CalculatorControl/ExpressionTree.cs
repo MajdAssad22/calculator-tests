@@ -45,7 +45,7 @@ namespace CalculatorControl
 
             foreach (var item in expression)
             {
-                double number;
+                double number = 0;
                 //In case of a percentage function
                 if (item.Equals(CalculatorParams.PERC))
                 {
@@ -58,7 +58,7 @@ namespace CalculatorControl
                     stC.Push(item);
                 }
                 // In case of a number
-                else if (double.TryParse(item, out number) || CalculatorLogic.IsMathConst(item))
+                else if (CalculatorLogic.TryConvertToNumber(item, ref number))
                 {
                     stN.Push(new Node(item));
                 }
@@ -140,7 +140,8 @@ namespace CalculatorControl
             // Leaf node i.e, a number or math const
             if (root.left == null && root.right == null)
             {
-                double number = CalculatorLogic.ConvertToNumber(root.data);
+                double number = 0;
+                CalculatorLogic.TryConvertToNumber(root.data, ref number);
                 return ExecuteFunctions(root.functions, number);
             }
 

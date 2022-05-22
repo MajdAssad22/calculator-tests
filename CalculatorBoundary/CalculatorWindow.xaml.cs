@@ -46,8 +46,8 @@ namespace CalculatorControl
             result_lbl.Content = Calculator.Calculate("10 + 120");
             Calculator.Base = CalculatorParams.Bases.Dec;
             result_lbl.Content = Calculator.Calculate("10 + 120");
-            //Calculator.Base = CalculatorParams.Bases.Hex;
-            //result_lbl.Content = Calculator.Calculate("A1 + B8");
+            Calculator.Base = CalculatorParams.Bases.Hex;
+            result_lbl.Content = Calculator.Calculate("A1 + B8");
 
             //Scientific Mode
             Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;

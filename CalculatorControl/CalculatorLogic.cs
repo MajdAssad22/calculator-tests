@@ -61,25 +61,41 @@ namespace CalculatorControl
                     return number;
             }
         }
-        public static double ConvertToNumber(string data)
+        public static bool TryConvertToNumber(string data, ref double number)
         {
             if(Calculator.Mode == CalculatorParams.CalculatorModes.Programmer)
             {
-                return Convert.ToInt32(data, (int)Calculator.Base);
+                try
+                {
+                    number = Convert.ToInt32(data, (int)Calculator.Base);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             else
             {
                 if (data.Equals(CalculatorParams.E))
                 {
-                    return Math.E;
+                    number = Math.E;
+                    return true;
                 }
                 else if (data.Equals(CalculatorParams.PI))
                 {
-                    return Math.PI;
+                    number = Math.PI;
+                    return true;
                 }
                 else
                 {
-                    return Convert.ToDouble(data);
+                    double output;
+                    if (double.TryParse(data, out output))
+                    {
+                        number = output;
+                        return true;
+                    }
+                    return false;
                 }
             }
         }
@@ -112,14 +128,6 @@ namespace CalculatorControl
                 || expression.Equals(CalculatorParams.ABS_FUNC)
                 || expression.Equals(CalculatorParams.SQRT_FUNC))
                 return true;
-            return false;
-        }
-        public static bool IsMathConst(string expression)
-        {
-            if (expression.Equals(CalculatorParams.E) || expression.Equals(CalculatorParams.PI))
-            {
-                return true;
-            }
             return false;
         }
     }
