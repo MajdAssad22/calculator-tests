@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BasicModeTests.cs" />
+    <Compile Include="ProgrammerModeTests.cs" />
+    <Compile Include="ScientificModeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
