@@ -75,29 +75,22 @@ namespace CalculatorControl
                     return false;
                 }
             }
-            else
+            if (data.Equals(CalculatorParams.E))
             {
-                if (data.Equals(CalculatorParams.E))
-                {
-                    number = Math.E;
-                    return true;
-                }
-                else if (data.Equals(CalculatorParams.PI))
-                {
-                    number = Math.PI;
-                    return true;
-                }
-                else
-                {
-                    double output;
-                    if (double.TryParse(data, out output))
-                    {
-                        number = output;
-                        return true;
-                    }
-                    return false;
-                }
+                number = Math.E;
+                return true;
             }
+            if (data.Equals(CalculatorParams.PI))
+            {
+                number = Math.PI;
+                return true;
+            }
+            if (double.TryParse(data, out double output))
+            {
+                number = output;
+                return true;
+            }
+            return false;
         }
         public static int GetPriority(string operation)
         {
@@ -129,6 +122,14 @@ namespace CalculatorControl
                 || expression.Equals(CalculatorParams.SQRT_FUNC))
                 return true;
             return false;
+        }
+        public static string ChangeBase(string data, CalculatorParams.Bases wantedBase)
+        {
+            if (Int32.TryParse(data, out int result))
+            {
+                return Convert.ToString(result, (int)wantedBase);
+            }
+            return CalculatorParams.INVALID_INPUT;
         }
     }
 }

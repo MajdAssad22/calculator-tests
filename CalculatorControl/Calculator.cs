@@ -11,13 +11,21 @@ namespace CalculatorControl
     {
         public static ObservableCollection<ExpressionTree> History = new ObservableCollection<ExpressionTree>();
         public static bool IsDegree { get; set; }
-        public static CalculatorParams.Bases Base = CalculatorParams.Bases.Dec;
-        public static CalculatorParams.CalculatorModes Mode = CalculatorParams.CalculatorModes.Basic;
+        public static CalculatorParams.Bases Base { get; set; } = CalculatorParams.Bases.Dec;
+        public static CalculatorParams.CalculatorModes Mode { get; set; } = CalculatorParams.CalculatorModes.Basic;
         
         public static string Calculate(string expression)
         {
             ExpressionTree tree = new ExpressionTree(expression);
             History.Add(tree);
+            return Format(tree);
+        }
+        public static string Format(ExpressionTree tree)
+        {
+            if(Mode == CalculatorParams.CalculatorModes.Programmer)
+            {
+                return CalculatorLogic.ChangeBase(tree.Result, Base);
+            }
             return tree.Result;
         }
     }
