@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CalculatorControl
+namespace CalculatorBoundary
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,10 +25,11 @@ namespace CalculatorControl
         public CalculatorWindow()
         {
             InitializeComponent();
-            history_lv.ItemsSource = Calculator.History;
-
+            InitializeItems();
+            
             //Basic Mode
             Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
+            Calculator.History.Clear();
             result_lbl.Content = Calculator.Calculate("3 + 9");
             result_lbl.Content = Calculator.Calculate("3 - 9");
             result_lbl.Content = Calculator.Calculate("3 * 9");
@@ -40,6 +41,7 @@ namespace CalculatorControl
 
             //Programer Mode
             Calculator.Mode = CalculatorParams.CalculatorModes.Programmer;
+            Calculator.History.Clear();
             Calculator.Base = CalculatorParams.Bases.Bin;
             result_lbl.Content = Calculator.Calculate("10110 + 10100");
             Calculator.Base = CalculatorParams.Bases.Oct;
@@ -51,6 +53,7 @@ namespace CalculatorControl
 
             //Scientific Mode
             Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+            Calculator.History.Clear();
             Calculator.IsDegree = true;
             result_lbl.Content = Calculator.Calculate("sin( 75 )");
             result_lbl.Content = Calculator.Calculate("cos( 60 )");
@@ -81,16 +84,24 @@ namespace CalculatorControl
             result_lbl.Content = Calculator.Calculate("e");
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void InitializeItems()
         {
-            var rand = new Random(); 
-            result_lbl.Content = Calculator.Calculate($"10 - ( 150 / 100 ) ^ 8 * {rand.Next(10)}");
+            history_lv.ItemsSource = Calculator.History;
+            HexBtn.DataContext = CalculatorParams.Bases.Hex;
+            DecBtn.DataContext = CalculatorParams.Bases.Dec;
+            OctBtn.DataContext = CalculatorParams.Bases.Oct;
+            BinBtn.DataContext = CalculatorParams.Bases.Bin;
+        }
+        private void ChangeBase_Click(object sender, RoutedEventArgs e)
+        {
+            var wantedBase = (CalculatorParams.Bases)((Button)sender).DataContext;
+            Calculator.Base = wantedBase;
         }
 
         private void history_lv_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedTree = (ExpressionTree)((ListView)sender).SelectedItem;
-            result_lbl.Content = selectedTree.Result;
+            result_lbl.Content = Calculator.Format(selectedTree);
         }
     }
 }
