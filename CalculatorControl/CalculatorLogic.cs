@@ -24,8 +24,15 @@ namespace CalculatorControl
         /// </returns>
         public static double CalculateFunction(string function, double number)
         {
+            bool isNegative = false;
+            if (function.StartsWith("-"))
+            {
+                isNegative = true;
+                function = function.Trim('-');
+            }
+
             // If the function is a trigonometric function
-            if((function == CalculatorParams.SIN_FUNC ||
+            if ((function == CalculatorParams.SIN_FUNC ||
                 function == CalculatorParams.COS_FUNC ||
                 function == CalculatorParams.TAN_FUNC) && Calculator.IsDegree)
             {
@@ -34,32 +41,39 @@ namespace CalculatorControl
             switch (function)
             {
                 case CalculatorParams.SIN_FUNC:
-                    return Math.Sin(number);
-
+                    number = Math.Sin(number);
+                    break;
                 case CalculatorParams.COS_FUNC:
-                    return Math.Cos(number);
-                
+                    number = Math.Cos(number);
+                    break;
                 case CalculatorParams.TAN_FUNC:
-                    return Math.Tan(number);
-                
+                    number = Math.Tan(number);
+                    break;
                 case CalculatorParams.LOG_FUNC:
-                    return Math.Log10(number);
-                
+                    number = Math.Log10(number);
+                    break;
                 case CalculatorParams.LN_FUNC:
-                    return Math.Log(number);
-
+                    number = Math.Log(number);
+                    break;
                 case CalculatorParams.PERC:
-                    return number / 100;
-
+                    number /= 100;
+                    break;
                 case CalculatorParams.ABS_FUNC:
-                    return Math.Abs(number);
-
+                    number = Math.Abs(number);
+                    break;
                 case CalculatorParams.SQRT_FUNC:
-                    return Math.Sqrt(number);
-                
+                    number = Math.Sqrt(number);
+                    break;
                 default:
-                    return number;
+                    break;
             }
+
+            if (isNegative)
+            {
+                return -number;
+            }
+
+            return number;
         }
         public static bool TryConvertToNumber(string data, ref double number)
         {
@@ -110,18 +124,30 @@ namespace CalculatorControl
                     return -1;
             }
         }
-        public static bool IsFunction(string expression)
+        public static bool IsFunction(string function)
         {
-            if (expression.Equals(CalculatorParams.SIN_FUNC)
-                || expression.Equals(CalculatorParams.COS_FUNC)
-                || expression.Equals(CalculatorParams.TAN_FUNC)
-                || expression.Equals(CalculatorParams.LOG_FUNC)
-                || expression.Equals(CalculatorParams.LN_FUNC)
-                || expression.Equals(CalculatorParams.PERC)
-                || expression.Equals(CalculatorParams.ABS_FUNC)
-                || expression.Equals(CalculatorParams.SQRT_FUNC))
-                return true;
-            return false;
+            if (function.StartsWith("-"))
+            {
+                function = function.Trim('-');
+                if (function.Equals(CalculatorParams.OPEN_BRACK))
+                {
+                    return true;
+                }
+            }
+            switch (function)
+            {
+                case CalculatorParams.SIN_FUNC:
+                case CalculatorParams.COS_FUNC:
+                case CalculatorParams.TAN_FUNC:
+                case CalculatorParams.LOG_FUNC:
+                case CalculatorParams.LN_FUNC:
+                case CalculatorParams.SQRT_FUNC:
+                case CalculatorParams.ABS_FUNC:
+                case CalculatorParams.PERC:
+                    return true;
+                default:
+                    return false;
+            }
         }
         public static string ChangeBase(string data, CalculatorParams.Bases wantedBase)
         {
