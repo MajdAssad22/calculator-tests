@@ -53,6 +53,7 @@
     <Compile Include="BasicModeTests.cs" />
     <Compile Include="ProgrammerModeTests.cs" />
     <Compile Include="ScientificModeTests.cs" />
+    <Compile Include="ExpressionTreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
