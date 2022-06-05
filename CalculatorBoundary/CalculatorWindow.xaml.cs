@@ -34,10 +34,23 @@ namespace CalculatorBoundary
             result_lbl.Content = Calculator.Calculate("3 - 9");
             result_lbl.Content = Calculator.Calculate("3 * 9");
             result_lbl.Content = Calculator.Calculate("3 / 9");
-            result_lbl.Content = Calculator.Calculate("( 3 - 18 ) / 5");
+            result_lbl.Content = Calculator.Calculate("( 3 - 18 )");
+            result_lbl.Content = Calculator.Calculate("3 ( + 5 )");
             result_lbl.Content = Calculator.Calculate("50 %");
             result_lbl.Content = Calculator.Calculate("( ( 50 - 7 * 5 / 25 ) ) % - 6 * 100");
             result_lbl.Content = Calculator.Calculate("2 / 0");
+
+            result_lbl.Content = Calculator.Calculate("+ ( )");
+            result_lbl.Content = Calculator.Calculate("5 %");
+            result_lbl.Content = Calculator.Calculate("( 9 + 2 ) %");
+            result_lbl.Content = Calculator.Calculate("% 5");
+            result_lbl.Content = Calculator.Calculate("( % 5 + 3)");
+            result_lbl.Content = Calculator.Calculate("9 + % 6");
+            result_lbl.Content = Calculator.Calculate("9 * 7 + 6 %");
+            result_lbl.Content = Calculator.Calculate("9 6");
+            result_lbl.Content = Calculator.Calculate("10 %");
+            result_lbl.Content = Calculator.Calculate("( e % )");
+            result_lbl.Content = Calculator.Calculate("9 ( 5 + 8 )");
 
             //Programer Mode
             Calculator.Mode = CalculatorParams.CalculatorModes.Programmer;
@@ -68,7 +81,7 @@ namespace CalculatorBoundary
             result_lbl.Content = Calculator.Calculate("abs( sin( 10 ) - 5 )");
             result_lbl.Content = Calculator.Calculate("abs( sin( 50 ) - 9 )");
             result_lbl.Content = Calculator.Calculate("abs( 10 - -9 )");
-            result_lbl.Content = Calculator.Calculate("sin( 50 )");
+            result_lbl.Content = Calculator.Calculate("-sin( 50 )");
             result_lbl.Content = Calculator.Calculate("ln( 8 * e )");
             result_lbl.Content = Calculator.Calculate("log( 30 )");
             result_lbl.Content = Calculator.Calculate("10 ^ ( 5 + 2 )");
@@ -82,6 +95,7 @@ namespace CalculatorBoundary
             result_lbl.Content = Calculator.Calculate("tan( 100 )");
             result_lbl.Content = Calculator.Calculate("π");
             result_lbl.Content = Calculator.Calculate("e");
+            result_lbl.Content = Calculator.Calculate("sin( -( 5 + 9 ) - 1 )");
         }
 
         private void InitializeItems()
