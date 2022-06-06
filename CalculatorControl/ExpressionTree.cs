@@ -11,26 +11,61 @@ namespace CalculatorControl
     {
         public class Node
         {
-            public string data;
-            public Queue<string> functions;
-            public Node left;
-            public Node right;
+            public string Data { get; set; }
+            public Queue<string> Functions { get; set; }
+            public Node Left { get; set; }
+            public Node Right { get; set; }
             public Node(string data)
             {
-                this.data = data;
-                left = right = null;
-                functions = new Queue<string>();
+                this.Data = data;
+                Left = Right = null;
+                Functions = new Queue<string>();
             }
+#if IN_TEST
+            public override bool Equals(object obj)
+            {
+                if (obj.GetType() == this.GetType())
+                {
+                    Node providedNode = (Node)obj;
+                    if (providedNode.Data == this.Data && 
+                        providedNode.Functions.SequenceEqual(this.Functions))
+                    {
+                        if (providedNode.Left == null && 
+                            this.Left == null &&
+                            providedNode.Right == null && 
+                            this.Right ==null)
+                        {
+                            //If its a leaf node and the data and the functions are the same
+                            return true;
+                        }
+                        if (providedNode.Left.Equals(this.Left) && 
+                            providedNode.Right.Equals(this.Right))
+                        {
+                            //If its not a leaf node but the data and the functions are the same
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+#endif
         }
 
         public string Expression { get; private set; }
         public string Result { get; private set; }
 
+#if IN_TEST
+        public ExpressionTree()
+        {
+            Expression = "";
+            Result = "";
+        }
+#endif
+
         public ExpressionTree(string expression)
         {
             this.Expression = expression;
-            var formatedExp = $"( {expression} )";
-            var root = BuildTree(formatedExp.Split(' ').ToList());
+            var root = BuildTree(expression.Split(' ').ToList());
             if (root != null)
             {
                 Result = Evaluate(root).ToString();
@@ -43,6 +78,11 @@ namespace CalculatorControl
             Stack<Node> stN = new Stack<Node>();
             // Stack to hold the operands and functions
             Stack<string> stC = new Stack<string>();
+            List<string> formatedExp = new List<string>();
+            formatedExp.Add("(");
+            formatedExp.AddRange(expression);
+            formatedExp.Add(")");
+            expression = formatedExp;
             for (int i = 0; i < expression.Count; i++)
             {
                 double number = 0;
@@ -61,7 +101,7 @@ namespace CalculatorControl
                                            prevItem.Equals(CalculatorParams.PERC)))
                     {
                         //If the previous item is a "closed bracket" or a "number" or "%"
-                        stN.Peek().functions.Enqueue(currentItem);
+                        stN.Peek().Functions.Enqueue(currentItem);
                     }
                     else
                     {
@@ -125,7 +165,7 @@ namespace CalculatorControl
                     if (CalculatorLogic.IsFunction(stC.Peek()))
                     {
                         var node = stN.Peek();
-                        node.functions.Enqueue(stC.Peek());
+                        node.Functions.Enqueue(stC.Peek());
                         stC.Pop();
                         continue;
                     }
@@ -143,7 +183,7 @@ namespace CalculatorControl
                         // If reached a function don't continue (the bracket is for the function)
                         if (CalculatorLogic.IsFunction(stC.Peek()))
                         {
-                            stN.Peek().functions.Enqueue(stC.Peek());
+                            stN.Peek().Functions.Enqueue(stC.Peek());
                             break;
                         }
                     }
@@ -169,44 +209,44 @@ namespace CalculatorControl
                 return 0;
 
             // Leaf node i.e, a number or math const
-            if (root.left == null && root.right == null)
+            if (root.Left == null && root.Right == null)
             {
                 double number = 0;
-                CalculatorLogic.TryConvertToNumber(root.data, ref number);
-                return ExecuteFunctions(root.functions, number);
+                CalculatorLogic.TryConvertToNumber(root.Data, ref number);
+                return ExecuteFunctions(root.Functions, number);
             }
 
             // Evaluate left subtree
-            double leftEval = Evaluate(root.left);
+            double leftEval = Evaluate(root.Left);
 
             // Evaluate right subtree
-            double rightEval = Evaluate(root.right);
+            double rightEval = Evaluate(root.Right);
 
             // Check which operator to apply
-            if (root.data.Equals(CalculatorParams.POW))
+            if (root.Data.Equals(CalculatorParams.POW))
             {
                 var number = Math.Pow(leftEval, rightEval);
-                return ExecuteFunctions(root.functions, number);
+                return ExecuteFunctions(root.Functions, number);
             }
-            if (root.data.Equals(CalculatorParams.MULT))
+            if (root.Data.Equals(CalculatorParams.MULT))
             {
                 var number = leftEval * rightEval;
-                return ExecuteFunctions(root.functions, number);
+                return ExecuteFunctions(root.Functions, number);
             }
-            if (root.data.Equals(CalculatorParams.DIV))
+            if (root.Data.Equals(CalculatorParams.DIV))
             {
                 var number = leftEval / rightEval;
-                return ExecuteFunctions(root.functions, number);
+                return ExecuteFunctions(root.Functions, number);
             }
-            if (root.data.Equals(CalculatorParams.ADD))
+            if (root.Data.Equals(CalculatorParams.ADD))
             {
                 var number = leftEval + rightEval;
-                return ExecuteFunctions(root.functions, number);
+                return ExecuteFunctions(root.Functions, number);
             }
-            if (root.data.Equals(CalculatorParams.SUB))
+            if (root.Data.Equals(CalculatorParams.SUB))
             {
                 var number = leftEval - rightEval;
-                return ExecuteFunctions(root.functions, number);
+                return ExecuteFunctions(root.Functions, number);
             }
             else
                 throw new ArgumentException();
@@ -225,8 +265,8 @@ namespace CalculatorControl
             stN.Pop();
             var t2 = stN.Peek();
             stN.Pop();
-            root.left = t2;
-            root.right = t1;
+            root.Left = t2;
+            root.Right = t1;
             stN.Push(root);
         }
 

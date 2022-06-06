@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CalculatorControl
 {
-    public class Calculator
+    public static class Calculator
     {
         public static ObservableCollection<ExpressionTree> History = new ObservableCollection<ExpressionTree>();
         public static bool IsDegree { get; set; }
