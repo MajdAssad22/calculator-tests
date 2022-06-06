@@ -77,7 +77,14 @@ namespace CalculatorControl
         }
         public static bool TryConvertToNumber(string data, ref double number)
         {
-            if(Calculator.Mode == CalculatorParams.CalculatorModes.Programmer)
+            bool isNegative = false;
+            if (data.StartsWith("-"))
+            {
+                isNegative = true;
+                data = data.Trim('-');
+            }
+
+            if (Calculator.Mode == CalculatorParams.CalculatorModes.Programmer)
             {
                 try
                 {
@@ -89,22 +96,28 @@ namespace CalculatorControl
                     return false;
                 }
             }
-            if (data.Equals(CalculatorParams.E))
+            else if (data.Equals(CalculatorParams.E))
             {
                 number = Math.E;
-                return true;
             }
-            if (data.Equals(CalculatorParams.PI))
+            else if (data.Equals(CalculatorParams.PI))
             {
                 number = Math.PI;
-                return true;
             }
-            if (double.TryParse(data, out double output))
+            else if (double.TryParse(data, out double output))
             {
                 number = output;
-                return true;
             }
-            return false;
+            else
+            {
+                return false;
+            }
+
+            if (isNegative)
+            {
+                number = -number;
+            }
+            return true;
         }
         public static int GetPriority(string operation)
         {
