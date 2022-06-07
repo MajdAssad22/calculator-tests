@@ -1,6 +1,7 @@
 ﻿using CalculatorControl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using static CalculatorControl.CalculatorParams;
 
 namespace CalculatorTests
 {
@@ -158,5 +159,193 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
+        // TryConvertToNumber
+        [TestMethod]
+        public void TryConvertToNumberTest()
+        {
+
+        }
+        //// IsFunction Test
+        [TestMethod]
+        public void Function01()// check
+        {
+            try
+            {
+            var result = CalculatorLogic.IsFunction("factor(");
+            Assert.AreEqual(false, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+
+        }
+        [TestMethod]
+        public void Function02()
+        {
+            try
+            {
+            var result = CalculatorLogic.IsFunction("-" + CalculatorParams.COS_FUNC);
+             Assert.AreEqual(true, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+            
+        }
+        [TestMethod]
+        public void Function03()
+        {
+            try
+            {
+            var result = CalculatorLogic.IsFunction(CalculatorParams.COS_FUNC);
+            Assert.AreEqual(true, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void Function04()
+        {
+            try
+            {
+            var result = CalculatorLogic.IsFunction("-sin(");
+            Assert.AreEqual(true, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        // GetPriority
+        [TestMethod]
+        public void PriorityFunction1() // ask about this 
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.POW);
+
+                Assert.AreEqual(3, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        } // pow
+        [TestMethod]
+        public void PriorityFunction2() // ask about this  // mult
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.MULT);
+
+                Assert.AreEqual(2, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void PriorityFunction3() // ask about this //div
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.DIV);
+
+                Assert.AreEqual(2, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void PriorityFunction4() // ask about this 
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.ADD);
+
+                Assert.AreEqual(1, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }//add
+        [TestMethod]
+        public void PriorityFunction5() // ask about this 
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.SUB);
+
+                Assert.AreEqual(1, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }//sub
+        [TestMethod]
+        public void PriorityFunction6() // ask about this 
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority(CalculatorParams.CLOSE_BRACK);
+
+                Assert.AreEqual(0, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }//close brack
+        [TestMethod]
+        public void PriorityFunction7() // ask about this 
+        {
+            try
+            {
+                var result = CalculatorLogic.GetPriority("factor()");
+
+                Assert.AreEqual(-1, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        // ChangeBase
+        [TestMethod]
+        public void ChangeBaseTest01()
+        {
+            try
+            {
+                var result = CalculatorLogic.ChangeBase("2", Bases.Bin);//base 2
+                Assert.AreEqual(Convert.ToString(2, 2), result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void ChangeBaseTest02()
+        {
+            try
+            {
+                var result = CalculatorLogic.ChangeBase("2.1", Bases.Bin);//base 2
+                Assert.AreEqual(INVALID_INPUT, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
     }
 }
