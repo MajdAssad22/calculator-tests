@@ -159,8 +159,70 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-        // TryConvertToNumber
         [TestMethod]
+        public void CalFunction12()
+        {
+            try
+            {
+                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                Calculator.IsDegree = true;
+                var result = CalculatorLogic.CalculateFunction(CalculatorParams.LOG_FUNC, 10);
+                Assert.AreEqual(Math.Log10(10), result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalFunction13()
+        {
+            try
+            {
+                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                Calculator.IsDegree = true;
+                var result = CalculatorLogic.CalculateFunction(CalculatorParams.LN_FUNC, Math.E);
+                Assert.AreEqual(Math.Log(Math.E), result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalFunction14()
+        {
+            try
+            {
+                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                Calculator.IsDegree = true;
+                var result = CalculatorLogic.CalculateFunction(CalculatorParams.PERC, 10);
+                Assert.AreEqual((double)10/100, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalFunction15()
+        {
+            try
+            {
+                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                Calculator.IsDegree = true;
+                var result = CalculatorLogic.CalculateFunction("nor(", 10);
+                Assert.AreEqual(10, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+
+        // log ln % nor
+        // TryConvertToNumber
         public void TryConvertToNumberTest()
         {
 
@@ -220,6 +282,20 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
+        [TestMethod]
+        public void Function05()
+        {
+            try
+            {
+                var result = CalculatorLogic.IsFunction("-(");
+                Assert.AreEqual(true, result);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }//-( → true
+        
         // GetPriority
         [TestMethod]
         public void PriorityFunction1() // ask about this 
