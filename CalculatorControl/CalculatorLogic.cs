@@ -9,6 +9,49 @@ namespace CalculatorControl
 {
     public static class CalculatorLogic
     {
+        public static bool TryConvertToNumber(string data, ref double number)
+        {
+            bool isNegative = false;
+            if (data.StartsWith("-"))
+            {
+                isNegative = true;
+                data = data.Trim('-');
+            }
+
+            if (Calculator.Mode == CalculatorParams.CalculatorModes.Programmer)
+            {
+                try
+                {
+                    number = Convert.ToInt32(data, (int)Calculator.Base);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else if (data.Equals(CalculatorParams.E))
+            {
+                number = Math.E;
+            }
+            else if (data.Equals(CalculatorParams.PI))
+            {
+                number = Math.PI;
+            }
+            else if (double.TryParse(data, out double output))
+            {
+                number = output;
+            }
+            else
+            {
+                return false;
+            }
+
+            if (isNegative)
+            {
+                number = -number;
+            }
+            return true;
+        }
         /// <summary>
         /// This function calculates the given mathematical function on a given number,
         /// If the function is not defined then the number is returned.
@@ -74,50 +117,6 @@ namespace CalculatorControl
             }
 
             return number;
-        }
-        public static bool TryConvertToNumber(string data, ref double number)
-        {
-            bool isNegative = false;
-            if (data.StartsWith("-"))
-            {
-                isNegative = true;
-                data = data.Trim('-');
-            }
-
-            if (Calculator.Mode == CalculatorParams.CalculatorModes.Programmer)
-            {
-                try
-                {
-                    number = Convert.ToInt32(data, (int)Calculator.Base);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-            else if (data.Equals(CalculatorParams.E))
-            {
-                number = Math.E;
-            }
-            else if (data.Equals(CalculatorParams.PI))
-            {
-                number = Math.PI;
-            }
-            else if (double.TryParse(data, out double output))
-            {
-                number = output;
-            }
-            else
-            {
-                return false;
-            }
-
-            if (isNegative)
-            {
-                number = -number;
-            }
-            return true;
         }
         public static int GetPriority(string operation)
         {
