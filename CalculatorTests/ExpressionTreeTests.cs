@@ -10,12 +10,10 @@ namespace CalculatorTests
     public class ExpressionTreeTests
     {
         private static ExpressionTree expressionTree;
-        private TestContext testContextInstance;
 
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
+        #region Additional test attributes
+
+        private TestContext testContextInstance;
         public TestContext TestContext
         {
             get
@@ -28,39 +26,24 @@ namespace CalculatorTests
             }
         }
 
-        #region Additional test attributes
-        //
-        // You can use the following additional attributes as you write your tests:
-        //
-        // Use ClassInitialize to run code before running the first test in the class
+        #endregion
+
         [ClassInitialize()]
-        public static void MyClassInitialize(TestContext testContext)
+        public static void TestsClassInitialize(TestContext testContext)
         {
-            expressionTree = new ExpressionTree("");
+            expressionTree = new ExpressionTree();
             Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
             Calculator.IsDegree = true;
         }
-        //
-        // Use ClassCleanup to run code after all tests in a class have run
-        // [ClassCleanup()]
-        // public static void MyClassCleanup() { }
-        //
-        // Use TestInitialize to run code before running each test 
-        // [TestInitialize()]
-        // public void MyTestInitialize() { }
-        //
-        // Use TestCleanup to run code after each test has run
-        // [TestCleanup()]
-        // public void MyTestCleanup() { }
-        //
-        #endregion
 
-        // BuildTree Function Tests
+        #region BuildTree Function Tests
+
         [TestMethod]
-        public void TestMethod1()
+        public void BuildTreeTest1()
         {
             try
             {
+                // Expression : [ ]
                 string[] expression = { "" };
 
                 ExpressionTree.Node expectedRoot = null;
@@ -74,11 +57,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod2()
+        public void BuildTreeTest2()
         {
             try
             {
-                string[] expression = { "%" };
+                // Expression : [ % ]
+                string[] expression = { CalculatorParams.PERC };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -91,14 +75,15 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod3()
+        public void BuildTreeTest3()
         {
             try
             {
-                string[] expression = { "(", "5", ")", "%" };
+                // Expression :[ (, 5, ), % ]
+                string[] expression = { CalculatorParams.OPEN_BRACK, "5", CalculatorParams.CLOSE_BRACK, CalculatorParams.PERC };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("5");
-                expectedRoot.Functions.Enqueue("%");
+                expectedRoot.Functions.Enqueue(CalculatorParams.PERC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -109,14 +94,15 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod4()
+        public void BuildTreeTest4()
         {
             try
             {
-                string[] expression = { "15", "%" };
+                // Expression : [ 15, % ]
+                string[] expression = { "15", CalculatorParams.PERC };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("15");
-                expectedRoot.Functions.Enqueue("%");
+                expectedRoot.Functions.Enqueue(CalculatorParams.PERC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -127,15 +113,16 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod5()
+        public void BuildTreeTest5()
         {
             try
             {
-                string[] expression = { "12", "%", "%" };
+                // Expression : [ 12, %, % ]
+                string[] expression = { "12", CalculatorParams.PERC, CalculatorParams.PERC };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("12");
-                expectedRoot.Functions.Enqueue("%");
-                expectedRoot.Functions.Enqueue("%");
+                expectedRoot.Functions.Enqueue(CalculatorParams.PERC);
+                expectedRoot.Functions.Enqueue(CalculatorParams.PERC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -146,11 +133,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod6()
+        public void BuildTreeTest6()
         {
             try
             {
-                string[] expression = { "15", "*", "(", "%", ")" };
+                // Expression : [ 15, *, (, %, ) ]
+                string[] expression = { "15", CalculatorParams.MULT, CalculatorParams.OPEN_BRACK, CalculatorParams.PERC, CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -163,11 +151,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod7()
+        public void BuildTreeTest7()
         {
             try
             {
-                string[] expression = { "12", "sin(", "4", ")" };
+                // Expression : [ 12, sin(, 4, ) ]
+                string[] expression = { "12", CalculatorParams.SIN_FUNC, "4", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -180,13 +169,14 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod8()
+        public void BuildTreeTest8()
         {
             try
             {
-                string[] expression = { "(", "(", "3", "+", "2", ")", ")" };
+                // Expression : [ (, (, 3, +, 2, ), ) ]
+                string[] expression = { CalculatorParams.OPEN_BRACK, CalculatorParams.OPEN_BRACK, "3", CalculatorParams.ADD, "2", CalculatorParams.CLOSE_BRACK, CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Left = new ExpressionTree.Node("3");
                 expectedRoot.Right = new ExpressionTree.Node("2");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -199,16 +189,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod9()
+        public void BuildTreeTest9()
         {
             try
             {
-                string[] expression = { "cos(", "(", "90", ")", "+", "5", ")" };
+                // Expression : [ cos(, (, 90, ), +, 5, ) ]
+                string[] expression = { CalculatorParams.COS_FUNC, CalculatorParams.OPEN_BRACK, "90", CalculatorParams.CLOSE_BRACK, CalculatorParams.ADD, "5", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Left = new ExpressionTree.Node("90");
                 expectedRoot.Right = new ExpressionTree.Node("5");
-                expectedRoot.Functions.Enqueue("cos(");
+                expectedRoot.Functions.Enqueue(CalculatorParams.COS_FUNC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -219,13 +210,14 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod10()
+        public void BuildTreeTest10()
         {
             try
             {
-                string[] expression = { "8", "*", "(", "10", ")" };
+                // Expression : [ 8, *, (, 10, ) ]
+                string[] expression = { "8", CalculatorParams.MULT, CalculatorParams.OPEN_BRACK, "10", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("*");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.MULT);
                 expectedRoot.Left = new ExpressionTree.Node("8");
                 expectedRoot.Right = new ExpressionTree.Node("10");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -238,11 +230,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod11()
+        public void BuildTreeTest11()
         {
             try
             {
-                string[] expression = { "(", "180", ")" };
+                // Expression : [ (, 180, ) ]
+                string[] expression = { CalculatorParams.OPEN_BRACK, "180", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("180");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -255,10 +248,11 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod12()
+        public void BuildTreeTest12()
         {
             try
             {
+                // Expression : [ 8 ]
                 string[] expression = { "8" };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("8");
@@ -272,13 +266,14 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod13()
+        public void BuildTreeTest13()
         {
             try
             {
-                string[] expression = { "180", "/", "20" };
+                // Expression : 180 / 20
+                string[] expression = { "180", CalculatorParams.DIV, "20" };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("/");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.DIV);
                 expectedRoot.Left = new ExpressionTree.Node("180");
                 expectedRoot.Right = new ExpressionTree.Node("20");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -291,15 +286,16 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod14()
+        public void BuildTreeTest14()
         {
             try
             {
-                string[] expression = { "60", "*", "(", "5", "+", "6", ")" };
+                // Expression : [ 60, *, (, 5, +, 6, ) ]
+                string[] expression = { "60", CalculatorParams.MULT, CalculatorParams.OPEN_BRACK, "5", CalculatorParams.ADD, "6", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("*");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.MULT);
                 expectedRoot.Left = new ExpressionTree.Node("60");
-                expectedRoot.Right = new ExpressionTree.Node("+");
+                expectedRoot.Right = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Right.Left = new ExpressionTree.Node("5");
                 expectedRoot.Right.Right = new ExpressionTree.Node("6");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -312,16 +308,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod15()
+        public void BuildTreeTest15()
         {
             try
             {
-                string[] expression = { "abs(", "5", "+", "-6", ")" };
+                // Expression : [ abs(, 5, +, -6, ) ]
+                string[] expression = { CalculatorParams.ABS_FUNC, "5", CalculatorParams.ADD, "-6", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Left = new ExpressionTree.Node("5");
                 expectedRoot.Right = new ExpressionTree.Node("-6");
-                expectedRoot.Functions.Enqueue("abs(");
+                expectedRoot.Functions.Enqueue(CalculatorParams.ABS_FUNC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -332,15 +329,16 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod16()
+        public void BuildTreeTest16()
         {
             try
             {
-                string[] expression = { "6", "+", "7", "^", "2" };
+                // Expression : [ 6, +, 7, ^, 2 ]
+                string[] expression = { "6", CalculatorParams.ADD, "7", CalculatorParams.POW, "2" };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Left = new ExpressionTree.Node("6");
-                expectedRoot.Right = new ExpressionTree.Node("^");
+                expectedRoot.Right = new ExpressionTree.Node(CalculatorParams.POW);
                 expectedRoot.Right.Left = new ExpressionTree.Node("7");
                 expectedRoot.Right.Right = new ExpressionTree.Node("2");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -353,15 +351,16 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod17()
+        public void BuildTreeTest17()
         {
             try
             {
-                string[] expression = { "6", "^", "2", "^", "3" };
+                // Expression : [ 6, ^, 2, ^, 3 ]
+                string[] expression = { "6", CalculatorParams.POW, "2", CalculatorParams.POW, "3" };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("^");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.POW);
                 expectedRoot.Left = new ExpressionTree.Node("6");
-                expectedRoot.Right = new ExpressionTree.Node("^");
+                expectedRoot.Right = new ExpressionTree.Node(CalculatorParams.POW);
                 expectedRoot.Right.Left = new ExpressionTree.Node("2");
                 expectedRoot.Right.Right = new ExpressionTree.Node("3");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -374,11 +373,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod18()
+        public void BuildTreeTest18()
         {
             try
             {
-                string[] expression = { "10", "*", "+" };
+                // Expression : [ 10, *, + ]
+                string[] expression = { "10", CalculatorParams.MULT, CalculatorParams.ADD };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -391,14 +391,15 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod19()
+        public void BuildTreeTest19()
         {
             try
             {
-                string[] expression = { "10", "*", "5", "+", "3" };
+                // Expression : [ 10, *, 5, +, 3 ]
+                string[] expression = { "10", CalculatorParams.MULT, "5", CalculatorParams.ADD, "3" };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
-                expectedRoot.Left = new ExpressionTree.Node("*");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
+                expectedRoot.Left = new ExpressionTree.Node(CalculatorParams.MULT);
                 expectedRoot.Right = new ExpressionTree.Node("3");
                 expectedRoot.Left.Left = new ExpressionTree.Node("10");
                 expectedRoot.Left.Right = new ExpressionTree.Node("5");
@@ -412,11 +413,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod20()
+        public void BuildTreeTest20()
         {
             try
             {
-                string[] expression = { "(", "5", "6", ")" };
+                // Expression : [ (, 5, 6, ) ]
+                string[] expression = { CalculatorParams.OPEN_BRACK, "5", "6", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -429,14 +431,15 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod21()
+        public void BuildTreeTest21()
         {
             try
             {
-                string[] expression = { "ln(", "52", ")" };
+                // Expression : [ ln(, 52, ) ]
+                string[] expression = { CalculatorParams.LN_FUNC, "52", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = new ExpressionTree.Node("52");
-                expectedRoot.Functions.Enqueue("ln(");
+                expectedRoot.Functions.Enqueue(CalculatorParams.LN_FUNC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -447,11 +450,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod22()
+        public void BuildTreeTest22()
         {
             try
             {
-                string[] expression = { "5", ")" };
+                // Expression : [ 5, ) ]
+                string[] expression = { "5", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -464,11 +468,12 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod23()
+        public void BuildTreeTest23()
         {
             try
             {
-                string[] expression = { "(", "/", "5", ")" };
+                // Expression : [ (, /, 5, ) ]
+                string[] expression = { CalculatorParams.OPEN_BRACK, CalculatorParams.DIV, "5", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -481,17 +486,18 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod24()
+        public void BuildTreeTest24()
         {
             try
             {
-                string[] expression = { "3", "+", "(", "5", "*", "9", "+", "2", ")" };
+                // Expression : [ 3, +, (, 5, *, 9, +, 2, ) ]
+                string[] expression = { "3", CalculatorParams.ADD, CalculatorParams.OPEN_BRACK, "5", CalculatorParams.MULT, "9", CalculatorParams.ADD, "2", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("+");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Left = new ExpressionTree.Node("3");
-                expectedRoot.Right = new ExpressionTree.Node("+");
+                expectedRoot.Right = new ExpressionTree.Node(CalculatorParams.ADD);
                 expectedRoot.Right.Right = new ExpressionTree.Node("2");
-                expectedRoot.Right.Left = new ExpressionTree.Node("*");
+                expectedRoot.Right.Left = new ExpressionTree.Node(CalculatorParams.MULT);
                 expectedRoot.Right.Left.Left = new ExpressionTree.Node("5");
                 expectedRoot.Right.Left.Right = new ExpressionTree.Node("9");
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
@@ -504,19 +510,19 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod25()
+        public void BuildTreeTest25()
         {
             try
             {
-                // Expression : abs(3*2-10)
-                string[] expression = { "abs(", "3", "*", "2", "-", "10", ")" };
+                // Expression : [ abs(, 3, *, 2, -, 10, ) ]
+                string[] expression = { CalculatorParams.ABS_FUNC, "3", CalculatorParams.MULT, "2", CalculatorParams.SUB, "10", CalculatorParams.CLOSE_BRACK };
 
-                ExpressionTree.Node expectedRoot = new ExpressionTree.Node("-");
-                expectedRoot.Left = new ExpressionTree.Node("*");
+                ExpressionTree.Node expectedRoot = new ExpressionTree.Node(CalculatorParams.SUB);
+                expectedRoot.Left = new ExpressionTree.Node(CalculatorParams.MULT);
                 expectedRoot.Right = new ExpressionTree.Node("10");
                 expectedRoot.Left.Left = new ExpressionTree.Node("3");
                 expectedRoot.Left.Right = new ExpressionTree.Node("2");
-                expectedRoot.Functions.Enqueue("abs(");
+                expectedRoot.Functions.Enqueue(CalculatorParams.ABS_FUNC);
                 ExpressionTree.Node actualRoot = expressionTree.BuildTree(expression.ToList());
 
                 Assert.AreEqual(expectedRoot, actualRoot);
@@ -527,11 +533,11 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod26()
+        public void BuildTreeTest26()
         {
             try
             {
-                // Expression : (2+5
+                // Expression : [ (, 2, +, 5 ]
                 string[] expression = { CalculatorParams.OPEN_BRACK, "2", CalculatorParams.ADD, "5" };
 
                 ExpressionTree.Node expectedRoot = null;
@@ -545,11 +551,11 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void TestMethod27()
+        public void BuildTreeTest27()
         {
             try
             {
-                // Expression : (2^+5)
+                // Expression : [ (, 2, ^, +, 5, ) ]
                 string[] expression = { CalculatorParams.OPEN_BRACK, "2", CalculatorParams.POW, CalculatorParams.ADD, "5", CalculatorParams.CLOSE_BRACK };
 
                 ExpressionTree.Node expectedRoot = null;
@@ -562,5 +568,335 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
+
+        #endregion
+
+        #region Evaluate Function Tests
+
+        [TestMethod]
+        public void EvaluateTest1()
+        {
+            try
+            {
+                // Root : null
+                ExpressionTree.Node root = null;
+
+                double expectedResult = 0;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void EvaluateTest2()
+        {
+            try
+            {
+                // Root :   5
+                ExpressionTree.Node root = new ExpressionTree.Node("5");
+
+                double expectedResult = 5;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void EvaluateTest3()
+        {
+            try
+            {
+                // Root :    ^
+                //            \
+                //             3
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.POW);
+                root.Right = new ExpressionTree.Node("3");
+
+                double expectedResult = 0;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void EvaluateTest4()
+        {
+            try
+            {
+                // Root :       ^
+                //            /   \
+                //           3     2
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.POW);
+                root.Left = new ExpressionTree.Node("3");
+                root.Right = new ExpressionTree.Node("2");
+
+                double expectedResult = 9;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void EvaluateTest5()
+        {
+            try
+            {
+                // Root :       *
+                //            /   \
+                //          -9     5
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.MULT);
+                root.Left = new ExpressionTree.Node("-9");
+                root.Right = new ExpressionTree.Node("5");
+
+                double expectedResult = -45;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void EvaluateTest6()
+        {
+            try
+            {
+                // Root :       /
+                //            /   \
+                //           6     2
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.DIV);
+                root.Left = new ExpressionTree.Node("6");
+                root.Right = new ExpressionTree.Node("2");
+
+                double expectedResult = 3;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void EvaluateTest7()
+        {
+            try
+            {
+                // Root :       +
+                //             /
+                //            8
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.ADD);
+                root.Left = new ExpressionTree.Node("8");
+
+                double expectedResult = 8;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void EvaluateTest8()
+        {
+            try
+            {
+                // Root :       -
+                //            "abs("    
+                //           /      \
+                //          5        9
+
+                ExpressionTree.Node root = new ExpressionTree.Node(CalculatorParams.SUB);
+                root.Left = new ExpressionTree.Node("5");
+                root.Right = new ExpressionTree.Node("9");
+                root.Functions.Enqueue(CalculatorParams.ABS_FUNC);
+
+                double expectedResult = 4;
+                double actualResult = expressionTree.Evaluate(root);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void EvaluateTest9()
+        {
+            // Root :      Test
+            //            /    \
+            //           6      1
+
+            ExpressionTree.Node root = new ExpressionTree.Node("Test");
+            root.Left = new ExpressionTree.Node("6");
+            root.Right = new ExpressionTree.Node("1");
+
+            expressionTree.Evaluate(root);
+
+            // Expecting Exception of type ArgumentException
+        }
+
+        #endregion
+
+        #region Constructor Tests
+
+        [TestMethod]
+        public void ConstuctorTest1()
+        {
+            try
+            {
+                // Expression : ( 2 + 5
+                string expression = $"{CalculatorParams.OPEN_BRACK} 2 {CalculatorParams.ADD} 5";
+
+                string expectedResult = CalculatorParams.INVALID_INPUT;
+                string expectedExpression = expression;
+                ExpressionTree tree = new ExpressionTree(expression);
+                string actualExpression = tree.Expression;
+                string actualResult = tree.Result;
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void ConstuctorTest2()
+        {
+            try
+            {
+                // Expression : ( 3 - 7 )
+                string expression = $"{CalculatorParams.OPEN_BRACK} 3 {CalculatorParams.SUB} 7 {CalculatorParams.CLOSE_BRACK}";
+
+                string expectedResult = "-4";
+                string expectedExpression = expression;
+                ExpressionTree tree = new ExpressionTree(expression);
+                string actualExpression = tree.Expression;
+                string actualResult = tree.Result;
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
+
+        #region AddBranch Funciton Tests
+
+        [TestMethod]
+        public void AddBranchTest1()
+        {
+            try
+            {
+                //                ↓ ↑       ↓ ↑ 
+                // stC , stN :  |  ^  | , |  2  |
+                //                        |  5  |
+                //                  
+
+                Stack<string> stC = new Stack<string>();
+                Stack<ExpressionTree.Node> stN = new Stack<ExpressionTree.Node>();
+                stC.Push(CalculatorParams.POW);
+                stN.Push(new ExpressionTree.Node("5"));
+                stN.Push(new ExpressionTree.Node("2"));
+
+                ExpressionTree.Node expectedBranch = new ExpressionTree.Node(CalculatorParams.POW);
+                expectedBranch.Left = new ExpressionTree.Node("5");
+                expectedBranch.Right = new ExpressionTree.Node("2");
+
+                expressionTree.AddBranchTest(stC,stN);
+
+                Assert.AreEqual(0, stC.Count);
+                Assert.AreEqual(stN.Peek(), expectedBranch);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
+
+        #region ExecuteFunctions Funciton Tests
+
+        [TestMethod]
+        public void ExecuteFunctionsTest1()
+        {
+            try
+            {
+                // Queue , Number : Empty Queue , 5
+                Queue<string> functions = new Queue<string>();
+                double number = 5;
+
+                double expectedResult = 5;
+                double actualResult = expressionTree.ExecuteFunctionsTest(functions, number);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void ExecuteFunctionsTest2()
+        {
+            try
+            {
+                //                     	↓
+                // Queue , Number : |   ln( | , -e
+                //                  |  abs( |
+                //                      ↓
+
+                Queue<string> functions = new Queue<string>();
+                functions.Enqueue(CalculatorParams.ABS_FUNC);
+                functions.Enqueue(CalculatorParams.LN_FUNC);
+                double number = -Math.E;
+
+                double expectedResult = 1;
+                double actualResult = expressionTree.ExecuteFunctionsTest(functions, number);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
     }
 }
