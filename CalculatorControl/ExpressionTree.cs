@@ -278,5 +278,17 @@ namespace CalculatorControl
             }
             return number;
         }
+
+#if IN_TEST
+        public double ExecuteFunctionsTest(Queue<string> functions, double number)
+        {
+            return ExecuteFunctions(functions, number);
+        }
+
+        public void AddBranchTest(Stack<string> stC, Stack<Node> stN)
+        {
+            AddBranch(stC, stN);
+        }
+#endif
     }
 }
