@@ -8,16 +8,26 @@ namespace CalculatorTests
     [TestClass]
     public class CalculatorLogicTest
     {
-        //CalculateFunction TEST
+
+        #region TryConvertToNumber Function Tests
+
         [TestMethod]
-        public void CalFunction01()
+        public void TryConvertToNumberTest1()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.SIN_FUNC, 13);
-                Assert.AreEqual(Math.Sin(13), result);
+                // Data , Number : "-10110" , 0
+                Calculator.Mode = CalculatorModes.Programmer;
+                Calculator.Base = Bases.Bin;
+                string data = "-10110";
+                double actualNumber = 0;
+
+                bool expectedResult = true;
+                double expectedNumber = -22;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -25,14 +35,22 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction02()
+        public void TryConvertToNumberTest2()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction("-" + CalculatorParams.SIN_FUNC, -15);
-                Assert.AreEqual(-Math.Sin(-15), result);
+                // Data , Number : "A6" , 0
+                Calculator.Mode = CalculatorModes.Programmer;
+                Calculator.Base = Bases.Hex;
+                string data = "A6";
+                double actualNumber = 0;
+
+                bool expectedResult = true;
+                double expectedNumber = 166;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -40,14 +58,21 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction03()
+        public void TryConvertToNumberTest3()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.COS_FUNC, 13);
-                Assert.AreEqual(Math.Cos(13), result);
+                // Data , Number : "e" , 0
+                Calculator.Mode = CalculatorModes.Scientific;
+                string data = "e";
+                double actualNumber = 0;
+
+                bool expectedResult = true;
+                double expectedNumber = Math.E;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -55,14 +80,21 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction04()
+        public void TryConvertToNumberTest4()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.SIN_FUNC, 0);
-                Assert.AreEqual(Math.Sin(0), result);
+                // Data , Number : "π" , 0
+                Calculator.Mode = CalculatorModes.Scientific;
+                string data = "π";
+                double actualNumber = 0;
+
+                bool expectedResult = true;
+                double expectedNumber = Math.PI;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -70,14 +102,21 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction05()
+        public void TryConvertToNumberTest5()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.SIN_FUNC, 90);
-                Assert.AreEqual(Math.Sin(90), result);
+                // Data , Number : "150" , 0
+                Calculator.Mode = CalculatorModes.Basic;
+                string data = "150";
+                double actualNumber = 0;
+
+                bool expectedResult = true;
+                double expectedNumber = 150;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -85,14 +124,46 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction06()
+        public void TryConvertToNumberTest6()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.TAN_FUNC, 360);
-                Assert.AreEqual(Math.Tan(360), result);
+                // Data , Number : "sin(" , 0
+                Calculator.Mode = CalculatorModes.Basic;
+                string data = "sin(";
+                double actualNumber = 0;
+
+                bool expectedResult = false;
+                double expectedNumber = 0;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        //Exception Tests
+        [TestMethod]
+        public void TryConvertToNumberExceptionTest1()
+        {
+            try
+            {
+                // Data , Number : "150" , 0
+                Calculator.Mode = CalculatorModes.Programmer;
+                Calculator.Base = Bases.Bin;
+                string data = "150";
+                double actualNumber = 0;
+
+                bool expectedResult = false;
+                double expectedNumber = 0;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
@@ -100,44 +171,47 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction07()
+        public void TryConvertToNumberExceptionTest2()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.COS_FUNC,0);
-                Assert.AreEqual(Math.Cos(0), result);
+                // Data , Number : "A3" , 0
+                Calculator.Mode = CalculatorModes.Programmer;
+                Calculator.Base = Bases.Hex + 4;
+                string data = "A3";
+                double actualNumber = 0;
+
+                bool expectedResult = false;
+                double expectedNumber = 0;
+                bool actualResult = CalculatorLogic.TryConvertToNumber(data, ref actualNumber);
+
+                Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedNumber, actualNumber);
             }
             catch (Exception e)
             {
                 Assert.Fail(e.Message);
             }
         }
+
+        #endregion
+
+        #region CalculateFunction Function Tests
+
         [TestMethod]
-        public void CalFunction08()
+        public void CalculateFunctionTest1()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = false;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.TAN_FUNC, 120);
-                Assert.AreEqual(Math.Tan(120), result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-        [TestMethod]
-        public void CalFunction09()
-        {
-            try
-            {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                // Function , Number : "-sin(" , 50
+                Calculator.Mode = CalculatorModes.Scientific;
                 Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.SIN_FUNC, 90);
-                Assert.AreEqual(Math.Sin(90 * Math.PI / 180), result);
+                string function = $"-{SIN_FUNC}";
+                double number = 50;
+
+                double expectedResult = -Math.Sin(number * Math.PI / 180);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -145,14 +219,19 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction11()
+        public void CalculateFunctionTest2()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                // Function , Number : "sin(" , 180
+                Calculator.Mode = CalculatorModes.Scientific;
                 Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.SQRT_FUNC, 9);
-                Assert.AreEqual(Math.Sqrt(9), result);
+                string function = SIN_FUNC;
+                double number = 180;
+
+                double expectedResult = Math.Sin(number * Math.PI / 180);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -160,14 +239,19 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction12()
+        public void CalculateFunctionTest3()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                // Function , Number : "cos(" , 85
+                Calculator.Mode = CalculatorModes.Scientific;
                 Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.LOG_FUNC, 10);
-                Assert.AreEqual(Math.Log10(10), result);
+                string function = COS_FUNC;
+                double number = 85;
+
+                double expectedResult = Math.Cos(number * Math.PI / 180);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -175,14 +259,19 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction13()
+        public void CalculateFunctionTest4()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                // Function , Number : "tan(" , 95
+                Calculator.Mode = CalculatorModes.Scientific;
                 Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.LN_FUNC, Math.E);
-                Assert.AreEqual(Math.Log(Math.E), result);
+                string function = TAN_FUNC;
+                double number = 95;
+
+                double expectedResult = Math.Tan(number * Math.PI / 180);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -190,14 +279,19 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction14()
+        public void CalculateFunctionTest5()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction(CalculatorParams.PERC, 10);
-                Assert.AreEqual((double)10/100, result);
+                // Function , Number : "tan(" , 2π
+                Calculator.Mode = CalculatorModes.Scientific;
+                Calculator.IsDegree = false;
+                string function = TAN_FUNC;
+                double number = 2 * Math.PI;
+
+                double expectedResult = Math.Tan(number);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -205,14 +299,113 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void CalFunction15()
+        public void CalculateFunctionTest6()
         {
             try
             {
-                Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
-                Calculator.IsDegree = true;
-                var result = CalculatorLogic.CalculateFunction("nor(", 10);
-                Assert.AreEqual(10, result);
+                // Function , Number : "log(" , 46
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = LOG_FUNC;
+                double number = 46;
+
+                double expectedResult = Math.Log10(number);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalculateFunctionTest7()
+        {
+            try
+            {
+                // Function , Number : "ln(" , e
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = LN_FUNC;
+                double number = Math.E;
+
+                double expectedResult = Math.Log(number);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalculateFunctionTest8()
+        {
+            try
+            {
+                // Function , Number : "%" , 85
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = PERC;
+                double number = 85;
+
+                double expectedResult = number / 100;
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalculateFunctionTest9()
+        {
+            try
+            {
+                // Function , Number : "abs(" , -6
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = ABS_FUNC;
+                double number = -6;
+
+                double expectedResult = Math.Abs(number);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalculateFunctionTest10()
+        {
+            try
+            {
+                // Function , Number : "sqrt(" , 16
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = SQRT_FUNC;
+                double number = 16;
+
+                double expectedResult = Math.Sqrt(number);
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void CalculateFunctionTest11()
+        {
+            try
+            {
+                // Function , Number : "factor(" , 75
+                Calculator.Mode = CalculatorModes.Scientific;
+                string function = "factor(";
+                double number = 75;
+
+                double expectedResult = number;
+                double actualResult = CalculatorLogic.CalculateFunction(function, number);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -220,49 +413,22 @@ namespace CalculatorTests
             }
         }
 
+        #endregion
 
-        // log ln % nor
-        // TryConvertToNumber
-        public void TryConvertToNumberTest()
-        {
+        #region GetPriority Function Tests
 
-        }
-        //// IsFunction Test
         [TestMethod]
-        public void Function01()// check
+        public void GetPriorityTest1()
         {
             try
             {
-            var result = CalculatorLogic.IsFunction("factor(");
-            Assert.AreEqual(false, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
+                // Operation : "^"
+                string operation = POW;
 
-        }
-        [TestMethod]
-        public void Function02()
-        {
-            try
-            {
-            var result = CalculatorLogic.IsFunction("-" + CalculatorParams.COS_FUNC);
-             Assert.AreEqual(true, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-            
-        }
-        [TestMethod]
-        public void Function03()
-        {
-            try
-            {
-            var result = CalculatorLogic.IsFunction(CalculatorParams.COS_FUNC);
-            Assert.AreEqual(true, result);
+                int expectedResult = 3;
+                int actualResult = CalculatorLogic.GetPriority(operation);
+
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -270,12 +436,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void Function04()
+        public void GetPriorityTest2()
         {
             try
             {
-            var result = CalculatorLogic.IsFunction("-sin(");
-            Assert.AreEqual(true, result);
+                // Operation : "*"
+                string operation = MULT;
+
+                int expectedResult = 2;
+                int actualResult = CalculatorLogic.GetPriority(operation);
+
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -283,42 +454,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void Function05()
+        public void GetPriorityTest3()
         {
             try
             {
-                var result = CalculatorLogic.IsFunction("-(");
-                Assert.AreEqual(true, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }//-( → true
-        
-        // GetPriority
-        [TestMethod]
-        public void PriorityFunction1() // ask about this 
-        {
-            try
-            {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.POW);
+                // Operation : "/"
+                string operation = DIV;
 
-                Assert.AreEqual(3, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        } // pow
-        [TestMethod]
-        public void PriorityFunction2() // ask about this  // mult
-        {
-            try
-            {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.MULT);
+                int expectedResult = 2;
+                int actualResult = CalculatorLogic.GetPriority(operation);
 
-                Assert.AreEqual(2, result);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -326,13 +472,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void PriorityFunction3() // ask about this //div
+        public void GetPriorityTest4()
         {
             try
             {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.DIV);
+                // Operation : "+"
+                string operation = ADD;
 
-                Assert.AreEqual(2, result);
+                int expectedResult = 1;
+                int actualResult = CalculatorLogic.GetPriority(operation);
+
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -340,69 +490,17 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void PriorityFunction4() // ask about this 
+        public void GetPriorityTest5()
         {
             try
             {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.ADD);
+                // Operation : "-"
+                string operation = SUB;
 
-                Assert.AreEqual(1, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }//add
-        [TestMethod]
-        public void PriorityFunction5() // ask about this 
-        {
-            try
-            {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.SUB);
+                int expectedResult = 1;
+                int actualResult = CalculatorLogic.GetPriority(operation);
 
-                Assert.AreEqual(1, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }//sub
-        [TestMethod]
-        public void PriorityFunction6() // ask about this 
-        {
-            try
-            {
-                var result = CalculatorLogic.GetPriority(CalculatorParams.CLOSE_BRACK);
-
-                Assert.AreEqual(0, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }//close brack
-        [TestMethod]
-        public void PriorityFunction7() // ask about this 
-        {
-            try
-            {
-                var result = CalculatorLogic.GetPriority("factor()");
-
-                Assert.AreEqual(-1, result);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-        // ChangeBase
-        [TestMethod]
-        public void ChangeBaseTest01()
-        {
-            try
-            {
-                var result = CalculatorLogic.ChangeBase("2", Bases.Bin);//base 2
-                Assert.AreEqual(Convert.ToString(2, 2), result);
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -410,12 +508,35 @@ namespace CalculatorTests
             }
         }
         [TestMethod]
-        public void ChangeBaseTest02()
+        public void GetPriorityTest6()
         {
             try
             {
-                var result = CalculatorLogic.ChangeBase("2.1", Bases.Bin);//base 2
-                Assert.AreEqual(INVALID_INPUT, result);
+                // Operation : ")"
+                string operation = CLOSE_BRACK;
+
+                int expectedResult = 0;
+                int actualResult = CalculatorLogic.GetPriority(operation);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void GetPriorityTest7()
+        {
+            try
+            {
+                // Operation : "factor("
+                string operation = "factor(";
+
+                int expectedResult = -1;
+                int actualResult = CalculatorLogic.GetPriority(operation);
+
+                Assert.AreEqual(expectedResult, actualResult);
             }
             catch (Exception e)
             {
@@ -423,5 +544,240 @@ namespace CalculatorTests
             }
         }
 
+        #endregion
+
+        #region IsFunction Function Tests
+
+        [TestMethod]
+        public void IsFunctionTest1()
+        {
+            try
+            {
+                // Function  : "-("
+                string function = $"-{OPEN_BRACK}";
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest2()
+        {
+            try
+            {
+                // Function  : "-sin("
+                string function = $"-{SIN_FUNC}";
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest3()
+        {
+            try
+            {
+                // Function  : "sin("
+                string function = SIN_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest4()
+        {
+            try
+            {
+                // Function  : "cos("
+                string function = COS_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest5()
+        {
+            try
+            {
+                // Function  : "tan("
+                string function = TAN_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest6()
+        {
+            try
+            {
+                // Function  : "log("
+                string function = LOG_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest7()
+        {
+            try
+            {
+                // Function  : "ln("
+                string function = LN_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest8()
+        {
+            try
+            {
+                // Function  : "sqrt("
+                string function = SQRT_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest9()
+        {
+            try
+            {
+                // Function  : "abs("
+                string function = ABS_FUNC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest10()
+        {
+            try
+            {
+                // Function  : "%"
+                string function = PERC;
+
+                bool expectedResult = true;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void IsFunctionTest11()
+        {
+            try
+            {
+                // Function  : "factor("
+                string function = "factor(";
+
+                bool expectedResult = false;
+                bool actualResult = CalculatorLogic.IsFunction(function);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
+
+        #region ChangeBase Function Tests
+
+        [TestMethod]
+        public void ChangeBaseTest1()
+        {
+            try
+            {
+                // Data , WantedBase : "2" , Bin
+                string data = "2";
+                Bases wantedBase = Bases.Bin;
+
+                string expectedResult = Convert.ToString(Convert.ToInt32(data), (int)wantedBase);
+                string actualResult = CalculatorLogic.ChangeBase(data, wantedBase);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void ChangeBaseTest2()
+        {
+            try
+            {// Data , WantedBase : "1.2" , Oct
+                string data = "1.2";
+                Bases wantedBase = Bases.Oct;
+
+                string expectedResult = INVALID_INPUT;
+                string actualResult = CalculatorLogic.ChangeBase(data, wantedBase);
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
     }
 }

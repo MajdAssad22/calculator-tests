@@ -36,6 +36,53 @@ namespace CalculatorTests
             Calculator.IsDegree = true;
         }
 
+        #region Constructor Tests
+
+        [TestMethod]
+        public void ConstuctorTest1()
+        {
+            try
+            {
+                // Expression : ( 2 + 5
+                string expression = $"{CalculatorParams.OPEN_BRACK} 2 {CalculatorParams.ADD} 5";
+
+                string expectedResult = CalculatorParams.INVALID_INPUT;
+                string expectedExpression = expression;
+                ExpressionTree tree = new ExpressionTree(expression);
+                string actualExpression = tree.Expression;
+                string actualResult = tree.Result;
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        [TestMethod]
+        public void ConstuctorTest2()
+        {
+            try
+            {
+                // Expression : ( 3 - 7 )
+                string expression = $"{CalculatorParams.OPEN_BRACK} 3 {CalculatorParams.SUB} 7 {CalculatorParams.CLOSE_BRACK}";
+
+                string expectedResult = "-4";
+                string expectedExpression = expression;
+                ExpressionTree tree = new ExpressionTree(expression);
+                string actualExpression = tree.Expression;
+                string actualResult = tree.Result;
+
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion
+
         #region BuildTree Function Tests
 
         [TestMethod]
@@ -764,53 +811,6 @@ namespace CalculatorTests
             expressionTree.Evaluate(root);
 
             // Expecting Exception of type ArgumentException
-        }
-
-        #endregion
-
-        #region Constructor Tests
-
-        [TestMethod]
-        public void ConstuctorTest1()
-        {
-            try
-            {
-                // Expression : ( 2 + 5
-                string expression = $"{CalculatorParams.OPEN_BRACK} 2 {CalculatorParams.ADD} 5";
-
-                string expectedResult = CalculatorParams.INVALID_INPUT;
-                string expectedExpression = expression;
-                ExpressionTree tree = new ExpressionTree(expression);
-                string actualExpression = tree.Expression;
-                string actualResult = tree.Result;
-
-                Assert.AreEqual(expectedResult, actualResult);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-        [TestMethod]
-        public void ConstuctorTest2()
-        {
-            try
-            {
-                // Expression : ( 3 - 7 )
-                string expression = $"{CalculatorParams.OPEN_BRACK} 3 {CalculatorParams.SUB} 7 {CalculatorParams.CLOSE_BRACK}";
-
-                string expectedResult = "-4";
-                string expectedExpression = expression;
-                ExpressionTree tree = new ExpressionTree(expression);
-                string actualExpression = tree.Expression;
-                string actualResult = tree.Result;
-
-                Assert.AreEqual(expectedResult, actualResult);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
         }
 
         #endregion
