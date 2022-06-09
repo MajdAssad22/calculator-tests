@@ -10,21 +10,6 @@
         Title="Calculator" Height="450" Width="800">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Label Name="result_lbl" Grid.Column="0" Grid.ColumnSpan="2"/>
-        <ListView Name="history_lv" SelectionChanged="history_lv_SelectionChanged" Grid.Column="2" Grid.ColumnSpan="2"/>
-        <Button Name="HexBtn" Grid.Row="1" Grid.Column="3" Click="ChangeBase_Click" Content="Hex"/>
-        <Button Name="DecBtn" Grid.Row="1" Grid.Column="2" Click="ChangeBase_Click" Content="Dec"/>
-        <Button Name="OctBtn" Grid.Row="1" Grid.Column="1" Click="ChangeBase_Click" Content="Oct"/>
-        <Button Name="BinBtn" Grid.Row="1" Grid.Column="0" Click="ChangeBase_Click" Content="Bin"/>
+
     </Grid>
 </Window>
