@@ -163,9 +163,9 @@ namespace CalculatorControl
         }
         public static string ChangeBase(string data, CalculatorParams.Bases wantedBase)
         {
-            if (Int32.TryParse(data, out int result))
+            if (decimal.TryParse(data, out decimal result))
             {
-                return Convert.ToString(result, (int)wantedBase);
+                return Convert.ToString((int)Math.Truncate(result), (int)wantedBase);
             }
             return CalculatorParams.INVALID_INPUT;
         }
