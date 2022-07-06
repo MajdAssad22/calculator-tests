@@ -164,6 +164,11 @@ namespace CalculatorControl
                     // In case of no operations in a function
                     if (CalculatorLogic.IsFunction(stC.Peek()))
                     {
+                        if(stN.Count == 0)
+                        {
+                            Result = CalculatorParams.INVALID_INPUT;
+                            return null;
+                        }
                         var node = stN.Peek();
                         node.Functions.Enqueue(stC.Peek());
                         stC.Pop();
