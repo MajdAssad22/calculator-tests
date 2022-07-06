@@ -1,4 +1,5 @@
 ﻿using CalculatorControl;
+using CalculatorTestProject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,46 @@ namespace CalculatorBoundary
     /// </summary>
     public partial class CalculatorWindow : Window
     {
+        private BasicView basicView = new BasicView();
+        private ProgrammerView programmerView = new ProgrammerView();
+        private ScientificView scientificView = new ScientificView();
+
         public CalculatorWindow()
         {
             InitializeComponent();
+            InitializeItems();
+        }
+
+        private void InitializeItems()
+        {
+            BasicTab.Content = basicView;
+            ProgrammerTab.Content = programmerView;
+            ScientificTab.Content = scientificView;
+        }
+        private void ChangeBase_Click(object sender, RoutedEventArgs e)
+        {
+            var wantedBase = (CalculatorParams.Bases)((Button)sender).DataContext;
+            Calculator.Base = wantedBase;
+        }
+
+        private void TabSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Calculator.History.Clear();
+            switch (((TabControl)sender).SelectedIndex)
+            {
+                case 0:
+                    Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
+                    basicView.DisplayLogic.ResetDisplay();
+                    break;
+                case 1:
+                    Calculator.Mode = CalculatorParams.CalculatorModes.Programmer;
+                    programmerView.DisplayLogic.ResetDisplay();
+                    break;
+                case 2:
+                    Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+                    scientificView.DisplayLogic.ResetDisplay();
+                    break;
+            }
         }
     }
 }

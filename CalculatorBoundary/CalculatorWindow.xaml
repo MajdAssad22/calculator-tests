@@ -5,11 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CalculatorBoundary"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:calculatorControl="clr-namespace:CalculatorControl;assembly=CalculatorControl"
         mc:Ignorable="d"
-        Title="Calculator" Height="450" Width="800">
-
+        Title="Calculator" Height="650" Width="1350">
+    
     <Grid>
-
+        <TabControl SelectionChanged="TabSelector_OnSelectionChanged">
+            <TabItem x:Name="BasicTab" Header="Basic" FontSize="20" IsSelected="True"/>
+            <TabItem x:Name="ProgrammerTab" Header="Programmer" FontSize="20"/>
+            <TabItem x:Name="ScientificTab" Header="Scientific" FontSize="20"/>
+        </TabControl>
     </Grid>
 </Window>
