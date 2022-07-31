@@ -767,7 +767,7 @@ namespace CalculatorTests
                 string data = "1.2";
                 Bases wantedBase = Bases.Oct;
 
-                string expectedResult = INVALID_INPUT;
+                string expectedResult = "1";
                 string actualResult = CalculatorLogic.ChangeBase(data, wantedBase);
 
                 Assert.AreEqual(expectedResult, actualResult);
