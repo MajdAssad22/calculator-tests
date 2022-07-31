@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CalculatorTestProject
 {
@@ -13,17 +12,26 @@ namespace CalculatorTestProject
         public event PropertyChangedEventHandler PropertyChanged;
         private string _currentExpression = "";
         private string _currentResult = "";
+        private int _expressionMaxLength = 100;
+        private int _resultMaxLength = 25;
+
+        //public int ExpressionLength
+        //{
+        //    get { return _currentExpression.Replace(" ", "").Length; }
+        //}
+        //public int ResultLength
+        //{
+        //    get { return _currentResult.Replace(" ", "").Length; }
+        //}
         public string CurrentExpression
         {
             get { return _currentExpression; }
             set
             {
-                if (_currentExpression != value)
-                {
-                    _currentExpression = value;
-                    OnPropertyChanged("CurrentExpression");
-                }
-
+                if (string.Equals(value, _currentExpression) || value.Replace(" ","").Length > _expressionMaxLength)
+                    return;
+                _currentExpression = value;
+                OnPropertyChanged("CurrentExpression");
             }
         }
         public string CurrentResult
@@ -31,11 +39,15 @@ namespace CalculatorTestProject
             get { return _currentResult; }
             set
             {
-                if (_currentResult != value)
-                {
-                    _currentResult = value;
+                if (string.Equals(value, _currentResult))
+                    return;
+                if (value.Length > _resultMaxLength) {
+                    _currentResult = value.Substring(0, _resultMaxLength);
                     OnPropertyChanged("CurrentResult");
+                    return;
                 }
+                _currentResult = value;
+                OnPropertyChanged("CurrentResult");
 
             }
         }
@@ -50,7 +62,7 @@ namespace CalculatorTestProject
             CurrentExpression = "";
             CurrentResult = "";
         }
-        public bool IsLastOperation()
+        private bool IsLastOperation()
         {
             return CurrentExpression.TrimEnd().EndsWith(CalculatorParams.SUB) ||
                 CurrentExpression.TrimEnd().EndsWith(CalculatorParams.ADD) ||
