@@ -25,8 +25,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <Label x:Name="ExpressionTb" Grid.Column="0" DataContext="{Binding DisplayLogic}" Content="{Binding Path=CurrentExpression}" Grid.Row="0" Grid.ColumnSpan="3" Background="Beige" Margin="5" FontSize="25" VerticalAlignment="Center" Padding="5,10"/>
-        <Label x:Name="ResultTb" Grid.Column="0" DataContext="{Binding DisplayLogic}" Content="{Binding Path=CurrentResult}" Grid.Row="1" Grid.ColumnSpan="3" Background="Beige" Margin="5" FontSize="25" VerticalAlignment="Center" Padding="5,10"/>
+        <Label x:FieldModifier="public" x:Name="ExpressionTb" Grid.Column="0" DataContext="{Binding DisplayLogic}" Content="{Binding Path=CurrentExpression}" Grid.Row="0" Grid.ColumnSpan="3" Background="Beige" Margin="5" FontSize="25" VerticalAlignment="Center" Padding="5,10"/>
+        <Label x:FieldModifier="public" x:Name="ResultTb" Grid.Column="0" DataContext="{Binding DisplayLogic}" Content="{Binding Path=CurrentResult}" Grid.Row="1" Grid.ColumnSpan="3" Background="Beige" Margin="5" FontSize="25" VerticalAlignment="Center" Padding="5,10"/>
 
         <!--Number Buttons-->
         <Grid Grid.Column="0" Grid.Row="2" Margin="10">
@@ -42,22 +42,22 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button x:Name="NumABtn" Content="A" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="0"/>
-            <Button x:Name="NumBBtn" Content="B" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="1"/>
-            <Button x:Name="NumCBtn" Content="C" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="2"/>
-            <Button x:Name="NumDBtn" Content="D" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="3"/>
-            <Button x:Name="Num7Btn" Content="7" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="0"/>
-            <Button x:Name="Num4Btn" Content="4" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="1"/>
-            <Button x:Name="Num1Btn" Content="1" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="2"/>
-            <Button x:Name="NumEBtn" Content="E" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="3"/>
-            <Button x:Name="Num8Btn" Content="8" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="0"/>
-            <Button x:Name="Num5Btn" Content="5" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="1"/>
-            <Button x:Name="Num2Btn" Content="2" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="2"/>
-            <Button x:Name="NumFBtn" Content="F" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="3"/>
-            <Button x:Name="Num9Btn" Content="9" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="0"/>
-            <Button x:Name="Num6Btn" Content="6" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="1"/>
-            <Button x:Name="Num3Btn" Content="3" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="2"/>
-            <Button x:Name="Num0Btn" Content="0" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="3"/>
+            <Button x:FieldModifier="public" x:Name="NumABtn" Content="A" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="0"/>
+            <Button x:FieldModifier="public" x:Name="NumBBtn" Content="B" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="1"/>
+            <Button x:FieldModifier="public" x:Name="NumCBtn" Content="C" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="2"/>
+            <Button x:FieldModifier="public" x:Name="NumDBtn" Content="D" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="3"/>
+            <Button x:FieldModifier="public" x:Name="Num7Btn" Content="7" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="0"/>
+            <Button x:FieldModifier="public" x:Name="Num4Btn" Content="4" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="1"/>
+            <Button x:FieldModifier="public" x:Name="Num1Btn" Content="1" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="2"/>
+            <Button x:FieldModifier="public" x:Name="NumEBtn" Content="E" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="3"/>
+            <Button x:FieldModifier="public" x:Name="Num8Btn" Content="8" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="0"/>
+            <Button x:FieldModifier="public" x:Name="Num5Btn" Content="5" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="1"/>
+            <Button x:FieldModifier="public" x:Name="Num2Btn" Content="2" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="2"/>
+            <Button x:FieldModifier="public" x:Name="NumFBtn" Content="F" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="3"/>
+            <Button x:FieldModifier="public" x:Name="Num9Btn" Content="9" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="0"/>
+            <Button x:FieldModifier="public" x:Name="Num6Btn" Content="6" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="1"/>
+            <Button x:FieldModifier="public" x:Name="Num3Btn" Content="3" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="2"/>
+            <Button x:FieldModifier="public" x:Name="Num0Btn" Content="0" Click="NumBtn_OnClick" Grid.Column="3" Grid.Row="3"/>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
@@ -73,10 +73,10 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="BinBtn" Content="BIN" Click="ChangeBaseBtn_OnClick" Grid.Column="0"/>
-                <Button x:Name="OctBtn" Content="OCT" Click="ChangeBaseBtn_OnClick" Grid.Column="1"/>
-                <Button x:Name="DecBtn" Content="DEC" Click="ChangeBaseBtn_OnClick" Grid.Column="2"/>
-                <Button x:Name="HexBtn" Content="HEX" Click="ChangeBaseBtn_OnClick" Grid.Column="3"/>
+                <Button x:FieldModifier="public" x:Name="BinBtn" Content="BIN" Click="ChangeBaseBtn_OnClick" Grid.Column="0"/>
+                <Button x:FieldModifier="public" x:Name="OctBtn" Content="OCT" Click="ChangeBaseBtn_OnClick" Grid.Column="1"/>
+                <Button x:FieldModifier="public" x:Name="DecBtn" Content="DEC" Click="ChangeBaseBtn_OnClick" Grid.Column="2"/>
+                <Button x:FieldModifier="public" x:Name="HexBtn" Content="HEX" Click="ChangeBaseBtn_OnClick" Grid.Column="3"/>
             </Grid>
             
             <Grid Grid.Row="1">
@@ -96,12 +96,12 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="OpenBrackBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="0"/>
-                    <Button x:Name="CloseBrackBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="0"/>
-                    <Button x:Name="MulBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="1"/>
-                    <Button x:Name="DivBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="1"/>
-                    <Button x:Name="AddBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="2"/>
-                    <Button x:Name="SubBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="2"/>
+                    <Button x:FieldModifier="public" x:Name="OpenBrackBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="0"/>
+                    <Button x:FieldModifier="public" x:Name="CloseBrackBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="0"/>
+                    <Button x:FieldModifier="public" x:Name="MulBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="1"/>
+                    <Button x:FieldModifier="public" x:Name="DivBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="1"/>
+                    <Button x:FieldModifier="public" x:Name="AddBtn" Click="OperationBtn_OnClick" Grid.Column="0" Grid.Row="2"/>
+                    <Button x:FieldModifier="public" x:Name="SubBtn" Click="OperationBtn_OnClick" Grid.Column="1" Grid.Row="2"/>
                 </Grid>
 
                 <!--Editing Buttons-->

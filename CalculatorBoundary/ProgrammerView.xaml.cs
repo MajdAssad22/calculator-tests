@@ -120,7 +120,7 @@ namespace CalculatorTestProject
         }
 
         //Events
-        private void HistoryLv_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void HistoryLv_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedTree = (ExpressionTree)((ListView)sender).SelectedItem;
             if (DisplayLogic.SelectHistory(selectedTree))
@@ -128,40 +128,50 @@ namespace CalculatorTestProject
                 e.Handled = true;
             }
         }
-        private void CBtn_OnClick(object sender, RoutedEventArgs e)
+        public void CBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.CurrentExpression = "";
         }
-        private void CEBtn_OnClick(object sender, RoutedEventArgs e)
+        public void CEBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.ResetDisplay();
         }
-        private void EqualBtn_OnClick(object sender, RoutedEventArgs e)
+        public void EqualBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.Calculate();
         }
-        private void OperationBtn_OnClick(object sender, RoutedEventArgs e)
+        public void OperationBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.ConcatinateOperation(((Button)sender).Content.ToString());
         }
-        private void NumBtn_OnClick(object sender, RoutedEventArgs e)
+        public void NumBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.ConcatinateNumber(((Button)sender).Content.ToString());
         }
-        private void ClearBtn_OnClick(object sender, RoutedEventArgs e)
+        public void ClearBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.ClearHistory();
         }
-        private void DeleteBtn_OnClick(object sender, RoutedEventArgs e)
+        public void DeleteBtn_OnClick(object sender, RoutedEventArgs e)
         {
             DisplayLogic.RemoveLast();
         }
-        private void ChangeBaseBtn_OnClick(object sender, RoutedEventArgs e)
+        public void ChangeBaseBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var wantedBase = (CalculatorParams.Bases)((Button)sender).Tag;
             DisplayLogic.ChangeBase(wantedBase);
             //DisplayLogic.ResetDisplay();
             DisableUnwantedButtons(wantedBase);
         }
+
+        #if IN_TEST
+        public void UpdateGui()
+        {
+            this.ExpressionTb.DataContext = null;
+            this.ExpressionTb.DataContext = DisplayLogic;
+            this.ResultTb.DataContext = null;
+            this.ResultTb.DataContext = DisplayLogic;
+        }
+        #endif
     }
 }
