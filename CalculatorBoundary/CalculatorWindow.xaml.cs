@@ -23,9 +23,9 @@ namespace CalculatorBoundary
     /// </summary>
     public partial class CalculatorWindow : Window
     {
-        private BasicView basicView = new BasicView();
-        private ProgrammerView programmerView = new ProgrammerView();
-        private ScientificView scientificView = new ScientificView();
+        public BasicView basicView = new BasicView();
+        public ProgrammerView programmerView = new ProgrammerView();
+        public ScientificView scientificView = new ScientificView();
 
         public CalculatorWindow()
         {
@@ -39,13 +39,8 @@ namespace CalculatorBoundary
             ProgrammerTab.Content = programmerView;
             ScientificTab.Content = scientificView;
         }
-        private void ChangeBase_Click(object sender, RoutedEventArgs e)
-        {
-            var wantedBase = (CalculatorParams.Bases)((Button)sender).DataContext;
-            Calculator.Base = wantedBase;
-        }
 
-        private void TabSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void TabSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Calculator.History.Clear();
             switch (((TabControl)sender).SelectedIndex)

@@ -15,14 +15,6 @@ namespace CalculatorTestProject
         private int _expressionMaxLength = 100;
         private int _resultMaxLength = 25;
 
-        //public int ExpressionLength
-        //{
-        //    get { return _currentExpression.Replace(" ", "").Length; }
-        //}
-        //public int ResultLength
-        //{
-        //    get { return _currentResult.Replace(" ", "").Length; }
-        //}
         public string CurrentExpression
         {
             get { return _currentExpression; }

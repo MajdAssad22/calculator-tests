@@ -9,10 +9,10 @@
         Title="Calculator" Height="650" Width="1350">
     
     <Grid>
-        <TabControl SelectionChanged="TabSelector_OnSelectionChanged">
-            <TabItem x:Name="BasicTab" Header="Basic" FontSize="20" IsSelected="True"/>
-            <TabItem x:Name="ProgrammerTab" Header="Programmer" FontSize="20"/>
-            <TabItem x:Name="ScientificTab" Header="Scientific" FontSize="20"/>
+        <TabControl x:FieldModifier="public" x:Name="ModeTabs" SelectionChanged="TabSelector_OnSelectionChanged">
+            <TabItem x:FieldModifier="public" x:Name="BasicTab" Header="Basic" FontSize="20" IsSelected="True"/>
+            <TabItem x:FieldModifier="public" x:Name="ProgrammerTab" Header="Programmer" FontSize="20"/>
+            <TabItem x:FieldModifier="public" x:Name="ScientificTab" Header="Scientific" FontSize="20"/>
         </TabControl>
     </Grid>
 </Window>

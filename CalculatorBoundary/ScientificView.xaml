@@ -47,7 +47,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button x:Name="RadDegBtn" Click="RadDegBtn_Click" Grid.Column="0" Grid.ColumnSpan="3" Margin="25,5,25,5" Grid.Row="0"/>
+                <Button x:FieldModifier="public" x:Name="RadDegBtn" Click="RadDegBtn_Click" Grid.Column="0" Grid.ColumnSpan="3" Margin="25,5,25,5" Grid.Row="0"/>
                 <Button x:FieldModifier="public" x:Name="Num1Btn" Content="1" Click="NumBtn_OnClick" Grid.Column="0" Grid.Row="3"/>
                 <Button x:FieldModifier="public" x:Name="Num2Btn" Content="2" Click="NumBtn_OnClick" Grid.Column="1" Grid.Row="3"/>
                 <Button x:FieldModifier="public" x:Name="Num3Btn" Content="3" Click="NumBtn_OnClick" Grid.Column="2" Grid.Row="3"/>
@@ -63,8 +63,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="Num0Btn" Content="0" Click="NumBtn_OnClick" Grid.Column="0"/>
-                <Button x:Name="DotBtn" Content="." Click="NumBtn_OnClick" Grid.Column="1"/>
+                <Button x:FieldModifier="public" x:Name="Num0Btn" Content="0" Click="NumBtn_OnClick" Grid.Column="0"/>
+                <Button x:FieldModifier="public" x:Name="DotBtn" Content="." Click="NumBtn_OnClick" Grid.Column="1"/>
             </Grid>
         </Grid>
 
@@ -147,7 +147,7 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="HistoryLv" SelectionChanged="HistoryLv_OnSelectionChanged" Grid.Row="0" Background="CornflowerBlue"/>
+            <ListView x:FieldModifier="public" x:Name="HistoryLv" SelectionChanged="HistoryLv_OnSelectionChanged" Grid.Row="0" Background="CornflowerBlue"/>
             <Button x:Name="ClearBtn" Content="Clear" Click="ClearBtn_OnClick" Grid.Row="1" FontSize="25" Style="{x:Null}"/>
         </Grid>
     </Grid>

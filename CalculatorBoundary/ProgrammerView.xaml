@@ -129,7 +129,7 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="HistoryLv" SelectionChanged="HistoryLv_OnSelectionChanged" Grid.Row="0" Background="CornflowerBlue"/>
+            <ListView x:FieldModifier="public" x:Name="HistoryLv" SelectionChanged="HistoryLv_OnSelectionChanged" Grid.Row="0" Background="CornflowerBlue"/>
             <Button x:Name="ClearBtn" Content="Clear" Click="ClearBtn_OnClick" Grid.Row="1" FontSize="25" Style="{x:Null}"/>
         </Grid>
     </Grid>
