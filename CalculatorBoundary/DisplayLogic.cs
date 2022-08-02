@@ -98,10 +98,21 @@ namespace CalculatorTestProject
                     operation == $"1 {CalculatorParams.DIV} {CalculatorParams.OPEN_BRACK}" ||
                     operation == $"10 {CalculatorParams.POW}")
                 {
-                    //If the given operation is a function or 1/( or 10^
-                    finalExp = $"{operation} {CurrentResult}";
-                    CurrentResult = "";
-                    isResultHandled = true;
+                    if(operation == CalculatorParams.PERC)
+                    {
+                        //If the given operation is a % then put the result before the operation
+                        finalExp = $"{CurrentResult} {operation}";
+                        CurrentResult = "";
+                        isResultHandled = true;
+                    }
+                    else
+                    {
+                        //If the given operation is a function or 1/( or 10^ and not % then 
+                        //put the result after the operation/function
+                        finalExp = $"{operation} {CurrentResult}";
+                        CurrentResult = "";
+                        isResultHandled = true;
+                    }
                 }
                 else
                 {
@@ -137,6 +148,7 @@ namespace CalculatorTestProject
         public void ClearHistory()
         {
             Calculator.History.Clear();
+            CurrentResult = "";
         }
         public void RemoveLast()
         {
