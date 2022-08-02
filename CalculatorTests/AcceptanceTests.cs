@@ -46,7 +46,6 @@ namespace CalculatorTests
             calculatorWindow = new CalculatorWindow();
         }
 
-
         #region Mathematical Expression Feeding Tests
         /*
          * Check the way to enter this mathematical expression:
@@ -171,7 +170,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "sin( 95 + 20 )";
-                string expectedResult = "0.90630778703665";
+                string expectedResult = Math.Sin(115*Math.PI/180).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }
@@ -255,7 +254,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "tan( 120 )";
-                string expectedResult = "-1.73205080756888";
+                string expectedResult = Math.Tan(120*Math.PI/180).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }
@@ -371,7 +370,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "log( 2 + 1.5 )";
-                string expectedResult = "0.544068044350276";
+                string expectedResult = Math.Log10(2 + 1.5).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }
@@ -410,7 +409,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "ln( e + 1.5 )";
-                string expectedResult = "1.43942789548574";
+                string expectedResult = Math.Log(Math.E + 1.5).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }
@@ -448,7 +447,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "95 ^ 1.2";
-                string expectedResult = "236.19370917015";
+                string expectedResult = Math.Pow(95,1.2).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }
@@ -488,7 +487,7 @@ namespace CalculatorTests
                 scientificView.UpdateGui();
 
                 string expectedExpression = "10 ^ ( 1.5 - 2 )";
-                string expectedResult = "0.316227766016838";
+                string expectedResult = Math.Pow(10, 1.5 - 2).ToString();
                 Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim()); // Check the expression
                 Assert.AreEqual(expectedResult, scientificView.ResultTb.Content); // Check the result;
             }

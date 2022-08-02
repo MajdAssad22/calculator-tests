@@ -160,7 +160,6 @@ namespace CalculatorTestProject
         {
             var wantedBase = (CalculatorParams.Bases)((Button)sender).Tag;
             DisplayLogic.ChangeBase(wantedBase);
-            //DisplayLogic.ResetDisplay();
             DisableUnwantedButtons(wantedBase);
         }
 
