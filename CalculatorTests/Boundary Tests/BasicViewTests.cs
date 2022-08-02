@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using CalculatorControl;
 using CalculatorTestProject;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -14,7 +15,6 @@ namespace CalculatorTests.Boundary_Tests
         private static BasicView basicView;
 
         #region Additional test attributes
-
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -27,40 +27,49 @@ namespace CalculatorTests.Boundary_Tests
                 testContextInstance = value;
             }
         }
-
         #endregion
 
-      /*  [ClassInitialize()]
+        [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
             basicView = new BasicView();
-        }*/
-
+        }
 
         //This will run after every test
         [TestInitialize]
         public void TestInitialize()
         {
-            basicView = new BasicView();
+            //basicView = new BasicView();
+            basicView.CEBtn_OnClick(null, null);
         }
 
-        /*[TestCleanup()]
-        public void CleanUp()
-        {
-            basicView.ExpressionTb.Content = "";
-            basicView.ResultTb.Content = "";
-        }
-        */
         #region HistoryLv_OnSelectionChanged Event Tests
+        [TestMethod]
+        public void HistoryLv()
+        {
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
+            basicView.EqualBtn_OnClick(null, null);
+            //string res = basicView.ResultTb.ToString();
+            basicView.CEBtn_OnClick(null, null);
+            basicView.UpdateGui();
 
-        #endregion
+            basicView.HistoryLv.SelectedIndex = 0;
+            var e = new SelectionChangedEventArgs(
+                    System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
+                    new List<ListView> { },
+                    new List<ListView> { basicView.HistoryLv });
+            basicView.HistoryLv_OnSelectionChanged(basicView.HistoryLv, e);
 
-        #region CBtn_OnClick Event Tests
+            //string checkIsEmpty = basicView.HistoryLv.Items[0].;
+            string checkIsEmpty = ((ExpressionTree)basicView.HistoryLv.Items[0]).Expression;
+            string checkResult = ((ExpressionTree)basicView.HistoryLv.Items[0]).Result;
 
-        #endregion
+            Assert.AreEqual(checkIsEmpty, basicView.ExpressionTb.Content.ToString().Trim());
+            Assert.AreEqual(checkResult, basicView.ResultTb.Content.ToString().Trim());
 
-        #region CEBtn_OnClick Event Tests
-
+        }//Check the expression that appear inside the history
         #endregion
 
         #region EqualBtn_OnClick Event Tests
@@ -140,7 +149,7 @@ namespace CalculatorTests.Boundary_Tests
             basicView.OperationBtn_OnClick(basicView.SubBtn, null);
             basicView.UpdateGui();
             Assert.AreEqual(" -", basicView.ExpressionTb.Content);//there is ' -' 
-        }//check Minus Operations → majd
+        }//check Minus Operations
         [TestMethod]
         public void SubClick01()
         {
@@ -209,7 +218,7 @@ namespace CalculatorTests.Boundary_Tests
             basicView.OperationBtn_OnClick(basicView.OpenBrackBtn, null);
             basicView.UpdateGui();
             Assert.AreEqual("2 ( ", basicView.ExpressionTb.Content);
-        }//MAJD CHECK THIS check Plus after clicking 1,+,1,=,CB,(
+        }// check Plus after clicking 1,+,1,=,CB,(
         [TestMethod]
         public void CloseBrackClick()
         {
@@ -228,27 +237,26 @@ namespace CalculatorTests.Boundary_Tests
             basicView.OperationBtn_OnClick(basicView.CloseBrackBtn, null);
             basicView.UpdateGui();
             Assert.AreEqual("2 ) ", basicView.ExpressionTb.Content);
-        }//MAJD CHECK THIS check Plus after clicking 1,+,1,=,CB,)
+        }// check Brack after clicking 1,+,1,=,CB,)
         [TestMethod]
         public void PercClick()
         {
             basicView.OperationBtn_OnClick(basicView.PercBtn, null);
             basicView.UpdateGui();
             Assert.AreEqual(" % ", basicView.ExpressionTb.Content);
-        }//check 1111Percentage
-        //[TestMethod]
-        //public void PercClick02()
-        //{
-        //    basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-        //    basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-        //    basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-        //    basicView.EqualBtn_OnClick(null, null);
-        //    basicView.CBtn_OnClick(null, null);
-        //    basicView.OperationBtn_OnClick(basicView.PercBtn, null);
-        //    basicView.UpdateGui();
-        //    Assert.AreEqual("2 % ", basicView.ExpressionTb.Content);
-        //}//MAJD CHECK THIS check Plus after clicking 1,+,1,=,CB,%
-
+        }//check Percentage
+        [TestMethod]
+        public void PercClick02()
+        {
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
+            basicView.EqualBtn_OnClick(null, null);
+            basicView.CBtn_OnClick(null, null);
+            basicView.OperationBtn_OnClick(basicView.PercBtn, null);
+            basicView.UpdateGui();
+            Assert.AreEqual("2 %", basicView.ExpressionTb.Content);
+        }//check Perc after clicking 1,+,1,=,CB,%
         #endregion
 
         #region NumBtn_OnClick Event Tests
@@ -617,27 +625,6 @@ namespace CalculatorTests.Boundary_Tests
             string checkIsEmpty = basicView.HistoryLv.Items[0].ToString();
             Assert.AreEqual(checkIsEmpty, basicView.ExpressionTb.Content.ToString().Trim());
         }
-        [TestMethod]
-        public void ClearBtnOnClick5()
-        {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CEBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            basicView.HistoryLv.SelectedIndex = 0;
-            var e = new SelectionChangedEventArgs(
-                    System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
-                    new List<ListView> { },
-                    new List<ListView> { basicView.HistoryLv });
-            basicView.HistoryLv_OnSelectionChanged(basicView.HistoryLv, e);
-
-            string checkIsEmpty = basicView.HistoryLv.Items[0].ToString();
-            Assert.AreEqual(checkIsEmpty, basicView.ExpressionTb.Content.ToString().Trim());
-        }//Check the expression that appear inside the history
-
         #endregion
 
         #region DeleteBtn_OnClick Event Tests
@@ -681,7 +668,6 @@ namespace CalculatorTests.Boundary_Tests
 
             Assert.AreEqual("", actualResult);
         }// check that after clicking the delete button the <result box> is empty
-
         #endregion
 
         #region CEBtn_OnClick Event Tests
@@ -787,6 +773,5 @@ namespace CalculatorTests.Boundary_Tests
             Assert.AreEqual("12", actualResult);
         }// Check that clicking CB button not effect the result button
         #endregion
-
     }
 }
