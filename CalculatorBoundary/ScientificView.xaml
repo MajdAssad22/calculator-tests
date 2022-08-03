@@ -74,7 +74,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="PercBtn" Click="OperationBtn_OnClick"/>
+            <Button x:FieldModifier="public" x:Name="PercBtn" Click="OperationBtn_OnClick"/>
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
