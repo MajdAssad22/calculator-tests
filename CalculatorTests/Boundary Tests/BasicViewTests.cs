@@ -14,7 +14,7 @@ namespace CalculatorTests.Boundary_Tests
     {
         private static BasicView basicView;
 
-        #region Additional test attributes
+        #region Test Attributes
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -27,11 +27,11 @@ namespace CalculatorTests.Boundary_Tests
                 testContextInstance = value;
             }
         }
-        #endregion
 
         [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
             basicView = new BasicView();
         }
 
@@ -39,11 +39,17 @@ namespace CalculatorTests.Boundary_Tests
         [TestInitialize]
         public void TestInitialize()
         {
-            //basicView = new BasicView();
             basicView.CEBtn_OnClick(null, null);
         }
+        #endregion
 
         #region HistoryLv_OnSelectionChanged Event Tests
+        /*
+         * This test is to check the functionality of the history list view
+         * its done by solving an expression and adding it to the history
+         * and reseting the view then we select it from the history and see if it 
+         * apears in the view
+         */
         [TestMethod]
         public void HistoryLv()
         {
@@ -51,36 +57,42 @@ namespace CalculatorTests.Boundary_Tests
             basicView.OperationBtn_OnClick(basicView.AddBtn, null);
             basicView.NumBtn_OnClick(basicView.Num6Btn, null);
             basicView.EqualBtn_OnClick(null, null);
-            //string res = basicView.ResultTb.ToString();
-            basicView.CEBtn_OnClick(null, null);
+            basicView.CEBtn_OnClick(null, null); // Clearing the view
             basicView.UpdateGui();
 
-            basicView.HistoryLv.SelectedIndex = 0;
+            basicView.HistoryLv.SelectedIndex = 0; // Selecting the first index
             var e = new SelectionChangedEventArgs(
                     System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
                     new List<ListView> { },
                     new List<ListView> { basicView.HistoryLv });
             basicView.HistoryLv_OnSelectionChanged(basicView.HistoryLv, e);
 
-            //string checkIsEmpty = basicView.HistoryLv.Items[0].;
-            string checkIsEmpty = ((ExpressionTree)basicView.HistoryLv.Items[0]).Expression;
-            string checkResult = ((ExpressionTree)basicView.HistoryLv.Items[0]).Result;
+            //Expression from the history
+            string expectedExpression = ((ExpressionTree)basicView.HistoryLv.SelectedItem).Expression;
+            //Result from the history
+            string expectedResult = ((ExpressionTree)basicView.HistoryLv.SelectedItem).Result;
 
-            Assert.AreEqual(checkIsEmpty, basicView.ExpressionTb.Content.ToString().Trim());
-            Assert.AreEqual(checkResult, basicView.ResultTb.Content.ToString().Trim());
+            Assert.AreEqual(expectedExpression, basicView.ExpressionTb.Content.ToString().Trim());
+            Assert.AreEqual(expectedResult, basicView.ResultTb.Content.ToString().Trim());
 
-        }//Check the expression that appear inside the history
+        }
         #endregion
 
         #region EqualBtn_OnClick Event Tests
+        /*
+         * Check the Equal button press:
+         * 
+         * 5 → 6 → 9 → =
+         * 
+         * Expected Result: 569
+         */
         [TestMethod]
         public void EqualBtnOnClick1()
         {
-            // 5 -> 6 -> 9 -> =
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
+            basicView.NumBtn_OnClick(basicView.Num9Btn, null); // 9
+            basicView.EqualBtn_OnClick(null, null); // =
             basicView.UpdateGui();
 
             string expectedResult = "569";
@@ -88,33 +100,25 @@ namespace CalculatorTests.Boundary_Tests
 
             Assert.AreEqual(expectedResult, actualResult);
         }
+        /*
+         * Check the Equal button press,
+         * done by pressing this sequence of buttons:
+         * 
+         * 5 → 6 → + → 9 → =
+         * 
+         * Expected Result: 65
+         */
         [TestMethod]
         public void EqualBtnOnClick2()
         {
-            // 5 -> 6 -> 9 -> =
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);//56 + 9
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num9Btn, null); // 9
+            basicView.EqualBtn_OnClick(null, null); // =
             basicView.UpdateGui();
-            string expectedResult = "65";
-            string actualResult = basicView.ResultTb.Content.ToString();
 
-            Assert.AreEqual(expectedResult, actualResult);
-        }
-        [TestMethod]
-        public void EqualBtnOnClick3()
-        {
-            // 5 -> 6 -> 9 -> =
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.NumBtn_OnClick(basicView.DotBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.UpdateGui();
-            string expectedResult = "14.6";
+            string expectedResult = "65";
             string actualResult = basicView.ResultTb.Content.ToString();
 
             Assert.AreEqual(expectedResult, actualResult);
@@ -122,656 +126,531 @@ namespace CalculatorTests.Boundary_Tests
         #endregion
 
         #region OperationBtn_OnClick Event Tests
+        /*
+         * Check the Operation button press:
+         * Check the add button:
+         * 
+         * Expected Result: +
+         */
         [TestMethod]
         public void AddClick()
         {
-            object sender = basicView.AddBtn;
-            RoutedEventArgs e = null;
-            basicView.OperationBtn_OnClick(sender, e);
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // pressing +
             basicView.UpdateGui();
-            Assert.AreEqual(" + ", basicView.ExpressionTb.Content);
-        }//check Plus Operations
+
+            Assert.AreEqual("+", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the add button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → +
+         * 
+         * Expected Result: 2 +
+         */
         [TestMethod]
         public void AddClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
             basicView.UpdateGui();
-            Assert.AreEqual("2 + ", basicView.ExpressionTb.Content);
-        }//check Plus after clicking 1,+,1,=,CB,+
+
+            Assert.AreEqual("2 +", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the sub button:
+         * 
+         * Expected Result: -
+         */
         [TestMethod]
         public void SubClick()
         {
-            basicView.OperationBtn_OnClick(basicView.SubBtn, null);
+            basicView.OperationBtn_OnClick(basicView.SubBtn, null); // -
             basicView.UpdateGui();
-            Assert.AreEqual(" -", basicView.ExpressionTb.Content);//there is ' -' 
-        }//check Minus Operations
+
+            Assert.AreEqual("-", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the sub button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → -
+         * 
+         * Expected Result: 2 -
+         */
         [TestMethod]
         public void SubClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.SubBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.SubBtn, null); // -
             basicView.UpdateGui();
-            Assert.AreEqual("2 -", basicView.ExpressionTb.Content);
-        }//check Plus after clicking 1,+,1,=,CB,-
+
+            Assert.AreEqual("2 -", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the mult button:
+         * 
+         * Expected Result: *
+         */
         [TestMethod]
         public void MultClick()
         {
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
+            basicView.OperationBtn_OnClick(basicView.MulBtn, null); // *
             basicView.UpdateGui();
-            Assert.AreEqual(" * ", basicView.ExpressionTb.Content);
-        }//check Multiple Operations
+
+            Assert.AreEqual("*", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the mult button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → *
+         * 
+         * Expected Result: 2 *
+         */
         [TestMethod]
         public void MultClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.MulBtn, null); // *
             basicView.UpdateGui();
+
             Assert.AreEqual("2 * ", basicView.ExpressionTb.Content);
-        }//check Plus after clicking 1,+,1,=,CB,*
+        }
+        /*
+         * Check the Operation button press:
+         * Check the div button:
+         * 
+         * Expected Result: /
+         */
         [TestMethod]
         public void DivClick()
         {
-            basicView.OperationBtn_OnClick(basicView.DivBtn, null);
+            basicView.OperationBtn_OnClick(basicView.DivBtn, null); // /
             basicView.UpdateGui();
-            Assert.AreEqual(" / ", basicView.ExpressionTb.Content);
-        }//check Divide Operations
+
+            Assert.AreEqual("/", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the sub button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → /
+         * 
+         * Expected Result: 2 /
+         */
         [TestMethod]
         public void DivClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.DivBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.DivBtn, null); // /
             basicView.UpdateGui();
-            Assert.AreEqual("2 / ", basicView.ExpressionTb.Content);
-        }//check Plus after clicking 1,+,1,=,CB,/
+
+            Assert.AreEqual("2 /", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the OpenBrack button:
+         * 
+         * Expected Result: (
+         */
         [TestMethod]
         public void OpenBrackClick()
         {
-            basicView.OperationBtn_OnClick(basicView.OpenBrackBtn, null);
+            basicView.OperationBtn_OnClick(basicView.OpenBrackBtn, null); // (
             basicView.UpdateGui();
-            Assert.AreEqual(" ( ", basicView.ExpressionTb.Content);
-        }//check 1111Open Brackets
+
+            Assert.AreEqual("(", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the OpenBrack button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → (
+         * 
+         * Expected Result: 2 (
+         */
         [TestMethod]
         public void OpenBrackClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.OpenBrackBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.OpenBrackBtn, null); // (
             basicView.UpdateGui();
-            Assert.AreEqual("2 ( ", basicView.ExpressionTb.Content);
-        }// check Plus after clicking 1,+,1,=,CB,(
+
+            Assert.AreEqual("2 (", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the CloseBrack button:
+         * 
+         * Expected Result: )
+         */
         [TestMethod]
         public void CloseBrackClick()
         {
-            basicView.OperationBtn_OnClick(basicView.CloseBrackBtn, null);
+            basicView.OperationBtn_OnClick(basicView.CloseBrackBtn, null); // )
             basicView.UpdateGui();
-            Assert.AreEqual(" ) ", basicView.ExpressionTb.Content);
-        }//check 1111Close Brackets
+
+            Assert.AreEqual(")", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the CloseBrack button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → )
+         * 
+         * Expected Result: 2 )
+         */
         [TestMethod]
         public void CloseBrackClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.CloseBrackBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.CloseBrackBtn, null); // )
             basicView.UpdateGui();
-            Assert.AreEqual("2 ) ", basicView.ExpressionTb.Content);
-        }// check Brack after clicking 1,+,1,=,CB,)
+
+            Assert.AreEqual("2 )", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the Perc button:
+         * 
+         * Expected Result: %
+         */
         [TestMethod]
         public void PercClick()
         {
-            basicView.OperationBtn_OnClick(basicView.PercBtn, null);
+            basicView.OperationBtn_OnClick(basicView.PercBtn, null); // %
             basicView.UpdateGui();
-            Assert.AreEqual(" % ", basicView.ExpressionTb.Content);
-        }//check Percentage
+
+            Assert.AreEqual("%", basicView.ExpressionTb.Content.ToString().Trim());
+        }
+        /*
+         * Check the Operation button press:
+         * Check the Perc button:
+         * 
+         * 1 → + → 1 → = → C (clean the expresion button) → %
+         * 
+         * Expected Result: 2 %
+         */
         [TestMethod]
-        public void PercClick02()
+        public void PercClick01()
         {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.OperationBtn_OnClick(basicView.PercBtn, null);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // clean the expression
+            basicView.OperationBtn_OnClick(basicView.PercBtn, null); // %
             basicView.UpdateGui();
-            Assert.AreEqual("2 %", basicView.ExpressionTb.Content);
-        }//check Perc after clicking 1,+,1,=,CB,%
+
+            Assert.AreEqual("2 %", basicView.ExpressionTb.Content.ToString().Trim());
+        }
         #endregion
 
         #region NumBtn_OnClick Event Tests
+        /*
+         * Check the Number button press:
+         * Check the 1 button:
+         * 
+         * Expected Result: 1
+         */
         [TestMethod]
         public void Number1ButtonClick()
         {
-            // Sender, e: Number 1 Button, Null
-            object sender = basicView.Num1Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num1Btn, null); // 1
             basicView.UpdateGui();
 
             Assert.AreEqual("1", basicView.ExpressionTb.Content);
-        }// check button 1
-        [TestMethod]
-        public void Number1ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.UpdateGui();
-            Assert.AreEqual("1", basicView.ExpressionTb.Content);
-        }// click 1
+        }
+        /*
+         * Check the Number button press:
+         * Check the 2 button:
+         * 
+         * Expected Result: 2
+         */
         [TestMethod]
         public void Number2ButtonClick()
         {
-            // Sender, e: Number 2 Button, Null
-            object sender = basicView.Num2Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num2Btn, null); // 2
             basicView.UpdateGui();
 
             Assert.AreEqual("2", basicView.ExpressionTb.Content);
-        }// check button 2
-        [TestMethod]
-        public void Number2ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num2Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("2", basicView.ExpressionTb.Content);
-        }// check button 2
+        }
+        /*
+         * Check the Number button press:
+         * Check the 3 button:
+         * 
+         * Expected Result: 3
+         */
         [TestMethod]
         public void Number3ButtonClick()
         {
-            // Sender, e: Number 3 Button, Null
-            object sender = basicView.Num3Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num3Btn, null); // 3
             basicView.UpdateGui();
 
             Assert.AreEqual("3", basicView.ExpressionTb.Content);
-        }// check button 3
-        [TestMethod]
-        public void Number3ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num3Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("3", basicView.ExpressionTb.Content);
-        }// check button 3
+        }
+        /*
+         * Check the Number button press:
+         * Check the 4 button:
+         * 
+         * Expected Result: 4
+         */
         [TestMethod]
         public void Number4ButtonClick()
         {
-            // Sender, e: Number 4 Button, Null
-            object sender = basicView.Num4Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num4Btn, null); // 4
             basicView.UpdateGui();
 
             Assert.AreEqual("4", basicView.ExpressionTb.Content);
-        }// check button 4
-        [TestMethod]
-        public void Number4ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num4Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("4", basicView.ExpressionTb.Content);
-        }// check button 4
+        }
+        /*
+         * Check the Number button press:
+         * Check the 5 button:
+         * 
+         * Expected Result: 5
+         */
         [TestMethod]
         public void Number5ButtonClick()
         {
-            // Sender, e: Number 5 Button, Null
-            object sender = basicView.Num5Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
             basicView.UpdateGui();
 
             Assert.AreEqual("5", basicView.ExpressionTb.Content);
-        }// check button 5
-        [TestMethod]
-        public void Number5ButtonClick02()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("5", basicView.ExpressionTb.Content);
-        }// check button 5
+        }
+        /*
+         * Check the Number button press:
+         * Check the 6 button:
+         * 
+         * Expected Result: 6
+         */
         [TestMethod]
         public void Number6ButtonClick()
         {
-            // Sender, e: Number 6 Button, Null
-            object sender = basicView.Num6Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
             basicView.UpdateGui();
 
             Assert.AreEqual("6", basicView.ExpressionTb.Content);
-        }// check button 6
-        [TestMethod]
-        public void Number6ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("6", basicView.ExpressionTb.Content);
-        }// check button 6
+        }
+        /*
+         * Check the Number button press:
+         * Check the 7 button:
+         * 
+         * Expected Result: 7
+         */
         [TestMethod]
         public void Number7ButtonClick()
         {
-            // Sender, e: Number 3 Button, Null
-            object sender = basicView.Num7Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num7Btn, null);
             basicView.UpdateGui();
 
             Assert.AreEqual("7", basicView.ExpressionTb.Content);
-        }// check button 7
-        [TestMethod]
-        public void Number7ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num7Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("7", basicView.ExpressionTb.Content);
-        }// check button 7
+        }
+        /*
+         * Check the Number button press:
+         * Check the 8 button:
+         * 
+         * Expected Result: 8
+         */
         [TestMethod]
         public void Number8ButtonClick()
         {
-            // Sender, e: Number 3 Button, Null
-            object sender = basicView.Num8Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num8Btn, null);
             basicView.UpdateGui();
 
             Assert.AreEqual("8", basicView.ExpressionTb.Content);
-        }// check button 8
-        [TestMethod]
-        public void Number8ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num8Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("8", basicView.ExpressionTb.Content);
-        }// check button 6
+        }
+        /*
+         * Check the Number button press:
+         * Check the 9 button:
+         * 
+         * Expected Result: 9
+         */
         [TestMethod]
         public void Number9ButtonClick()
         {
-            // Sender, e: Number 9 Button, Null
-            object sender = basicView.Num9Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
             basicView.UpdateGui();
 
             Assert.AreEqual("9", basicView.ExpressionTb.Content);
-        }// check button 9
-        [TestMethod]
-        public void Number9ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("9", basicView.ExpressionTb.Content);
-        }// check button 6
+        }
+        /*
+         * Check the Number button press:
+         * Check the 0 button:
+         * 
+         * Expected Result: 0
+         */
         [TestMethod]
         public void Number0ButtonClick()
         {
-            // Sender, e: Number 3 Button, Null
-            object sender = basicView.Num0Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.Num0Btn, null);
             basicView.UpdateGui();
 
             Assert.AreEqual("0", basicView.ExpressionTb.Content);
-        }// check button 0
-        [TestMethod]
-        public void Number0ButtonClick01()
-        {
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.NumBtn_OnClick(basicView.Num0Btn, null);//we check here
-            basicView.UpdateGui();
-            Assert.AreEqual("0", basicView.ExpressionTb.Content);
-        }// check button 0
-        [TestMethod]
-        public void Number0ButtonClick2()
-        {
-            // Sender, e: Number 3 Button, Null
-            object sender = basicView.Num0Btn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            Assert.AreEqual("0", basicView.ResultTb.Content);
-        }// check multiple zeros then equal and check the <result box>
+        }
+        /*
+         * Check the Number button press:
+         * Check the Dot button:
+         * 
+         * Expected Result: .
+         */
         [TestMethod]
         public void DotButtonClick()
         {
-            // Sender, e: Dot Button, Null
-            object sender = basicView.DotBtn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
+            basicView.NumBtn_OnClick(basicView.DotBtn, null);
             basicView.UpdateGui();
 
             Assert.AreEqual(".", basicView.ExpressionTb.Content);
-        }// check dot button
-        [TestMethod]
-        public void DotButtonClick2()
-        {
-            // Sender, e: Dot Button, Null
-            object sender = basicView.DotBtn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.NumBtn_OnClick(basicView.Num0Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num1Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            Assert.AreEqual("1", basicView.ResultTb.Content);
-        }// check dot button .0+1 = 1
-        [TestMethod]
-        public void DotButtonClick3()
-        {
-            // Sender, e: Dot Button, Null
-            object sender = basicView.DotBtn;
-            RoutedEventArgs e = null;
-
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.NumBtn_OnClick(sender, e);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            Assert.AreEqual("Incorrect Input", basicView.ResultTb.Content);
-        }// check Incorrect Input Message
+        }
         #endregion
 
         #region ClearBtn_OnClick Event Tests
+        /*
+         * Check the Clear button press, we provide and solve an expression
+         * then we press the clear button and expect the cound of the history list 
+         * to be 0
+         */
         [TestMethod]
         public void ClearBtnOnClick()
         {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.ClearBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.OperationBtn_OnClick(basicView.AddBtn, null); // +
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.ClearBtn_OnClick(null, null); // clear history button
             basicView.UpdateGui();
 
-
-            //string actualResult = basicView.HistoryLv;
-            string checkIsEmpty = basicView.HistoryLv.Items.Count.ToString();
-
-            Assert.AreEqual("0", checkIsEmpty);
-        }//check the button with an operation
-        [TestMethod]
-        public void ClearBtnOnClick2()
-        {
-            basicView.NumBtn_OnClick(basicView.Num0Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num0Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num0Btn, null);
-
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.ClearBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-
-            //string actualResult = basicView.HistoryLv;
-            string checkIsEmpty = basicView.HistoryLv.Items.Count.ToString();
-
-            Assert.AreEqual("0", checkIsEmpty);
-        }
-        [TestMethod]
-        public void ClearBtnOnClick3()
-        {
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num9Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.ClearBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-
-            //string actualResult = basicView.HistoryLv;
-            string checkIsEmpty = basicView.HistoryLv.Items.Count.ToString();
-
-            Assert.AreEqual("0", checkIsEmpty);
-        }//typing big number 
-        [TestMethod]
-        public void ClearBtnOnClick4()
-        {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            basicView.HistoryLv.SelectedIndex = 0;
-            var e = new SelectionChangedEventArgs(
-                    System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
-                    new List<ListView> { },
-                    new List<ListView> { basicView.HistoryLv });
-            basicView.HistoryLv_OnSelectionChanged(basicView.HistoryLv, e);
-
-            string checkIsEmpty = basicView.HistoryLv.Items[0].ToString();
-            Assert.AreEqual(checkIsEmpty, basicView.ExpressionTb.Content.ToString().Trim());
+            Assert.AreEqual(0, basicView.HistoryLv.Items.Count);
         }
         #endregion
 
         #region DeleteBtn_OnClick Event Tests
+        /*
+         * Check the Delete button press:
+         * Check the expression after we press the delete button
+         * 
+         * 5 → 6 → Delete
+         * 
+         * Expected Expression: 5
+         */
         [TestMethod]
         public void DeleteBtnOnClick()
         {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.DeleteBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
+            basicView.DeleteBtn_OnClick(null, null); // Delete
             basicView.UpdateGui();
 
             string actualResult = basicView.ExpressionTb.Content.ToString();
 
             Assert.AreEqual("5", actualResult);
-        }// check that if the Expression before clicking equal button
+        }
+        /*
+         * Check the Delete button press:
+         * Check the expression and the result after we press the delete button
+         * 
+         * 5 → * → 2 → = → Delete
+         * 
+         * Expected Expression: 5
+         * Expected Result:
+         */
         [TestMethod]
         public void DeleteBtnOnClick2()
         {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num2Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.DeleteBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.OperationBtn_OnClick(basicView.MulBtn, null); // *
+            basicView.NumBtn_OnClick(basicView.Num2Btn, null); // 2
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.DeleteBtn_OnClick(null, null); // Delete
             basicView.UpdateGui();
 
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-
-            Assert.AreEqual("5 * ", actualResult);
-        }// check the <Input Expression> changed after clicking equal button 
-        [TestMethod]
-        public void DeleteBtnOnClick3()
-        {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num2Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.DeleteBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
+            string actualExpression = basicView.ExpressionTb.Content.ToString();
             string actualResult = basicView.ResultTb.Content.ToString();
 
+            Assert.AreEqual("5 * ", actualExpression);
             Assert.AreEqual("", actualResult);
-        }// check that after clicking the delete button the <result box> is empty
+        }
         #endregion
 
         #region CEBtn_OnClick Event Tests
+        /*
+         * Check the CE button press:
+         * Check if the expression and result are empty
+         * 
+         * 5 → * → 6 → = → CE 
+         * 
+         * Expected Expression: 
+         * Expected Result: 
+         */
         [TestMethod]
         public void CEBtnOnClick()
         {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num6Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CEBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num5Btn, null); // 5
+            basicView.OperationBtn_OnClick(basicView.MulBtn, null); // *
+            basicView.NumBtn_OnClick(basicView.Num6Btn, null); // 6
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CEBtn_OnClick(null, null); // CE
             basicView.UpdateGui();
 
-            string actualResult01 = basicView.ExpressionTb.Content.ToString();
-            string actualResult02 = basicView.ResultTb.Content.ToString();
-            string check = actualResult01 + actualResult02;
-            Assert.AreEqual("", check);
-        }//check the CE with Operation include equal button ,checking that the exprssion and the result are empty 
-        [TestMethod]
-        public void CEBtnOnClick2()
-        {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.CEBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-            Assert.AreEqual("", actualResult);
-        }//check the CE with an Expression before clicking equal operation
-        [TestMethod]
-        public void CEBtnOnClick3()
-        {
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
-            basicView.OperationBtn_OnClick(basicView.DivBtn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            basicView.CEBtn_OnClick(null, null);
-            
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-            Assert.AreEqual("", actualResult);
-        }// Include incorrect input
-        [TestMethod]
-        public void CEBtnOnClick4()
-        {
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.OperationBtn_OnClick(basicView.MulBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num5Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.CEBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
+            string actualExpression = basicView.ExpressionTb.Content.ToString();
             string actualResult = basicView.ResultTb.Content.ToString();
+
+            Assert.AreEqual("", actualExpression);
             Assert.AreEqual("", actualResult);
-        }//check the result after clicking  5 , * ,5  , = , C , CE
+        }
         #endregion
 
         #region CBtn_OnClick Event Tests
+        /*
+         * Check the C button press:
+         * Check if the expression is empty and the result still have data
+         * 
+         * 8 → / → 4 → = → C
+         * 
+         * Expected Expression: 
+         * Expected Result: 2
+         */
         [TestMethod]
         public void CBtnOnClick1()
         {
-            basicView.NumBtn_OnClick(basicView.Num8Btn, null);
-            basicView.OperationBtn_OnClick(basicView.DivBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num4Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
+            basicView.NumBtn_OnClick(basicView.Num8Btn, null); // 8
+            basicView.OperationBtn_OnClick(basicView.DivBtn, null); // /
+            basicView.NumBtn_OnClick(basicView.Num4Btn, null); // 4
+            basicView.EqualBtn_OnClick(null, null); // =
+            basicView.CBtn_OnClick(null, null); // C (clean)
             basicView.UpdateGui();
 
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-            Assert.AreEqual("", actualResult);
-        }// Check the Expression after clicking equal button
-        [TestMethod]
-        public void CBtnOnClick2()
-        {
-            basicView.NumBtn_OnClick(basicView.Num8Btn, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-            Assert.AreEqual("", actualResult);
-        }// Clicking one number
-        [TestMethod]
-        public void CBtnOnClick3()
-        {
-            basicView.NumBtn_OnClick(basicView.PercBtn, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
-            string actualResult = basicView.ExpressionTb.Content.ToString();
-            Assert.AreEqual("", actualResult);
-        }//check clicking
-        [TestMethod]
-        public void CBtnOnClick4()
-        {
-            basicView.NumBtn_OnClick(basicView.Num8Btn, null);
-            basicView.OperationBtn_OnClick(basicView.AddBtn, null);
-            basicView.NumBtn_OnClick(basicView.Num4Btn, null);
-            basicView.EqualBtn_OnClick(null, null);
-            basicView.CBtn_OnClick(null, null);
-            basicView.UpdateGui();
-
+            string actualExpression = basicView.ExpressionTb.Content.ToString();
             string actualResult = basicView.ResultTb.Content.ToString();
-            Assert.AreEqual("12", actualResult);
-        }// Check that clicking CB button not effect the result button
+            Assert.AreEqual("", actualExpression);
+            Assert.AreEqual("2", actualResult);
+        }
         #endregion
     }
 }
