@@ -122,7 +122,8 @@ namespace CalculatorTestProject
             }
             if (!isResultHandled)
             {
-                if ((operation == CalculatorParams.SUB) &&
+                if ((operation == CalculatorParams.SUB ||
+                    operation == CalculatorParams.ADD) &&
                     (IsLastOperation() ||
                      CurrentExpression.TrimEnd().EndsWith(CalculatorParams.OPEN_BRACK)||
                      string.IsNullOrWhiteSpace(CurrentExpression)))
@@ -135,7 +136,7 @@ namespace CalculatorTestProject
                     finalExp += $" {operation} ";
                 }
             }
-            CurrentExpression = finalExp;
+            CurrentExpression = finalExp.TrimStart();
         }
         public void ConcatinateNumber(string number)
         {
@@ -169,6 +170,11 @@ namespace CalculatorTestProject
                 else
                 {
                     CurrentExpression = trimmedExp.Remove(trimmedExp.Length - 1, 1);
+                }
+                var newSplit = CurrentExpression.Trim().Split(' ');
+                if (!IsLastOperation() && !CalculatorLogic.IsFunction(newSplit[newSplit.Length - 1]))
+                {
+                    CurrentExpression = CurrentExpression.Trim();
                 }
             }
         }
@@ -207,5 +213,12 @@ namespace CalculatorTestProject
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        
+        #if IN_TEST
+        public bool IsLastOperationCaller()
+        {
+            return IsLastOperation();
+        }
+        #endif
     }
 }
