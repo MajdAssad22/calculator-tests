@@ -49,30 +49,36 @@ namespace CalculatorTests.Boundary_Tests
          * apears in the view
          */
         [TestMethod]
-        public void HistoryLv()
+        public void HistoryLv_OnSelectionChangedTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null);
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null);
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null);
-            scientificView.EqualBtn_OnClick(null, null);
-            scientificView.CEBtn_OnClick(null, null); // Clearing the view
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CEBtn_OnClick(null, null); // Clearing the view
+                scientificView.UpdateGui();
 
-            scientificView.HistoryLv.SelectedIndex = 0; // Selecting the first index
-            var e = new SelectionChangedEventArgs(
-                    System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
-                    new List<ListView> { },
-                    new List<ListView> { scientificView.HistoryLv });
-            scientificView.HistoryLv_OnSelectionChanged(scientificView.HistoryLv, e);
+                scientificView.HistoryLv.SelectedIndex = 0; // Selecting the first index
+                var e = new SelectionChangedEventArgs(
+                        System.Windows.Controls.Primitives.Selector.SelectionChangedEvent,
+                        new List<ListView> { },
+                        new List<ListView> { scientificView.HistoryLv });
+                scientificView.HistoryLv_OnSelectionChanged(scientificView.HistoryLv, e);
 
-            //Expression from the history
-            string expectedExpression = ((ExpressionTree)scientificView.HistoryLv.SelectedItem).Expression;
-            //Result from the history
-            string expectedResult = ((ExpressionTree)scientificView.HistoryLv.SelectedItem).Result;
+                //Expression from the history
+                string expectedExpression = ((ExpressionTree)scientificView.HistoryLv.SelectedItem).Expression;
+                //Result from the history
+                string expectedResult = ((ExpressionTree)scientificView.HistoryLv.SelectedItem).Result;
 
-            Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim());
-            Assert.AreEqual(expectedResult, scientificView.ResultTb.Content.ToString().Trim());
-
+                Assert.AreEqual(expectedExpression, scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual(expectedResult, scientificView.ResultTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -85,18 +91,25 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 569
          */
         [TestMethod]
-        public void EqualBtnOnClick1()
+        public void EqualBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.NumBtn_OnClick(scientificView.Num9Btn, null); // 9
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.NumBtn_OnClick(scientificView.Num9Btn, null); // 9
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.UpdateGui();
 
-            string expectedResult = "569";
-            string actualResult = scientificView.ResultTb.Content.ToString();
+                string expectedResult = "569";
+                string actualResult = scientificView.ResultTb.Content.ToString();
 
-            Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Equal button press,
@@ -107,19 +120,26 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 65
          */
         [TestMethod]
-        public void EqualBtnOnClick2()
+        public void EqualBtn_OnClickTest2()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num9Btn, null); // 9
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num9Btn, null); // 9
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.UpdateGui();
 
-            string expectedResult = "65";
-            string actualResult = scientificView.ResultTb.Content.ToString();
+                string expectedResult = "65";
+                string actualResult = scientificView.ResultTb.Content.ToString();
 
-            Assert.AreEqual(expectedResult, actualResult);
+                Assert.AreEqual(expectedResult, actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -131,12 +151,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: +
          */
         [TestMethod]
-        public void AddClick()
+        public void OperationBtn_OnClickTest1()
         {
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // pressing +
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("+", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("+", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -147,17 +174,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 +
          */
         [TestMethod]
-        public void AddClick01()
+        public void OperationBtn_OnClickTest2()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 +", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 +", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -166,12 +200,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: -
          */
         [TestMethod]
-        public void SubClick()
+        public void OperationBtn_OnClickTest3()
         {
-            scientificView.OperationBtn_OnClick(scientificView.SubBtn, null); // -
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.SubBtn, null); // -
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("-", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("-", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -182,17 +223,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 -
          */
         [TestMethod]
-        public void SubClick01()
+        public void OperationBtn_OnClickTest4()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.SubBtn, null); // -
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.SubBtn, null); // -
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 -", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 -", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -201,12 +249,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: *
          */
         [TestMethod]
-        public void MultClick()
+        public void OperationBtn_OnClickTest5()
         {
-            scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("*", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("*", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -217,17 +272,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 *
          */
         [TestMethod]
-        public void MultClick01()
+        public void OperationBtn_OnClickTest6()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 * ", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("2 * ", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -236,12 +298,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: /
          */
         [TestMethod]
-        public void DivClick()
+        public void OperationBtn_OnClickTest7()
         {
-            scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("/", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("/", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -252,17 +321,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 /
          */
         [TestMethod]
-        public void DivClick01()
+        public void OperationBtn_OnClickTest8()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 /", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 /", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -271,12 +347,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: (
          */
         [TestMethod]
-        public void OpenBrackClick()
+        public void OperationBtn_OnClickTest9()
         {
-            scientificView.OperationBtn_OnClick(scientificView.OpenBrackBtn, null); // (
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.OpenBrackBtn, null); // (
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("(", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("(", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -287,17 +370,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 (
          */
         [TestMethod]
-        public void OpenBrackClick01()
+        public void OperationBtn_OnClickTest10()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.OpenBrackBtn, null); // (
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.OpenBrackBtn, null); // (
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 (", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 (", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -306,12 +396,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: )
          */
         [TestMethod]
-        public void CloseBrackClick()
+        public void OperationBtn_OnClickTest11()
         {
-            scientificView.OperationBtn_OnClick(scientificView.CloseBrackBtn, null); // )
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.CloseBrackBtn, null); // )
+                scientificView.UpdateGui();
 
-            Assert.AreEqual(")", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual(")", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -322,17 +419,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 )
          */
         [TestMethod]
-        public void CloseBrackClick01()
+        public void OperationBtn_OnClickTest12()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.CloseBrackBtn, null); // )
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.CloseBrackBtn, null); // )
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 )", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 )", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -341,12 +445,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: %
          */
         [TestMethod]
-        public void PercClick()
+        public void OperationBtn_OnClickTest13()
         {
-            scientificView.OperationBtn_OnClick(scientificView.PercBtn, null); // %
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.OperationBtn_OnClick(scientificView.PercBtn, null); // %
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("%", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("%", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Operation button press:
@@ -357,17 +468,24 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2 %
          */
         [TestMethod]
-        public void PercClick01()
+        public void OperationBtn_OnClickTest14()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // clean the expression
-            scientificView.OperationBtn_OnClick(scientificView.PercBtn, null); // %
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // clean the expression
+                scientificView.OperationBtn_OnClick(scientificView.PercBtn, null); // %
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2 %", scientificView.ExpressionTb.Content.ToString().Trim());
+                Assert.AreEqual("2 %", scientificView.ExpressionTb.Content.ToString().Trim());
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -379,12 +497,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 1
          */
         [TestMethod]
-        public void Number1ButtonClick()
+        public void NumBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num1Btn, null); // 1
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("1", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("1", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -393,12 +518,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2
          */
         [TestMethod]
-        public void Number2ButtonClick()
+        public void NumBtn_OnClickTest2()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num2Btn, null); // 2
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num2Btn, null); // 2
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("2", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("2", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -407,12 +539,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 3
          */
         [TestMethod]
-        public void Number3ButtonClick()
+        public void NumBtn_OnClickTest3()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num3Btn, null); // 3
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num3Btn, null); // 3
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("3", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("3", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -421,12 +560,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 4
          */
         [TestMethod]
-        public void Number4ButtonClick()
+        public void NumBtn_OnClickTest4()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num4Btn, null); // 4
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num4Btn, null); // 4
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("4", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("4", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -435,12 +581,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 5
          */
         [TestMethod]
-        public void Number5ButtonClick()
+        public void NumBtn_OnClickTest5()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("5", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("5", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -449,12 +602,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 6
          */
         [TestMethod]
-        public void Number6ButtonClick()
+        public void NumBtn_OnClickTest6()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("6", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("6", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -463,12 +623,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 7
          */
         [TestMethod]
-        public void Number7ButtonClick()
+        public void NumBtn_OnClickTest7()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num7Btn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num7Btn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("7", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("7", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -477,12 +644,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 8
          */
         [TestMethod]
-        public void Number8ButtonClick()
+        public void NumBtn_OnClickTest8()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num8Btn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num8Btn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("8", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("8", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -491,12 +665,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 9
          */
         [TestMethod]
-        public void Number9ButtonClick()
+        public void NumBtn_OnClickTest9()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num9Btn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num9Btn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("9", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("9", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -505,12 +686,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 0
          */
         [TestMethod]
-        public void Number0ButtonClick()
+        public void NumBtn_OnClickTest10()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num0Btn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num0Btn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("0", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("0", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -519,12 +707,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: e
          */
         [TestMethod]
-        public void EButtonClick()
+        public void NumBtn_OnClickTest11()
         {
-            scientificView.NumBtn_OnClick(scientificView.EBtn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.EBtn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual("e", scientificView.ExpressionTb.Content);
+                Assert.AreEqual("e", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -533,12 +728,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: π
          */
         [TestMethod]
-        public void PIButtonClick()
+        public void NumBtn_OnClickTest12()
         {
-            scientificView.NumBtn_OnClick(scientificView.PIBtn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.PIBtn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual(CalculatorParams.PI, scientificView.ExpressionTb.Content);
+                Assert.AreEqual(CalculatorParams.PI, scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Number button press:
@@ -547,12 +749,19 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: .
          */
         [TestMethod]
-        public void DotButtonClick()
+        public void NumBtn_OnClickTest13()
         {
-            scientificView.NumBtn_OnClick(scientificView.DotBtn, null);
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.DotBtn, null);
+                scientificView.UpdateGui();
 
-            Assert.AreEqual(".", scientificView.ExpressionTb.Content);
+                Assert.AreEqual(".", scientificView.ExpressionTb.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -563,16 +772,23 @@ namespace CalculatorTests.Boundary_Tests
          * to be 0
          */
         [TestMethod]
-        public void ClearBtnOnClick()
+        public void ClearBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.ClearBtn_OnClick(null, null); // clear history button
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.OperationBtn_OnClick(scientificView.AddBtn, null); // +
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.ClearBtn_OnClick(null, null); // clear history button
+                scientificView.UpdateGui();
 
-            Assert.AreEqual(0, scientificView.HistoryLv.Items.Count);
+                Assert.AreEqual(0, scientificView.HistoryLv.Items.Count);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -586,16 +802,23 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Expression: 5
          */
         [TestMethod]
-        public void DeleteBtnOnClick()
+        public void DeleteBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.DeleteBtn_OnClick(null, null); // Delete
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.DeleteBtn_OnClick(null, null); // Delete
+                scientificView.UpdateGui();
 
-            string actualResult = scientificView.ExpressionTb.Content.ToString();
+                string actualResult = scientificView.ExpressionTb.Content.ToString();
 
-            Assert.AreEqual("5", actualResult);
+                Assert.AreEqual("5", actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         /*
          * Check the Delete button press:
@@ -603,24 +826,31 @@ namespace CalculatorTests.Boundary_Tests
          * 
          * 5 → * → 2 → = → Delete
          * 
-         * Expected Expression: 5
+         * Expected Expression: 5 * 
          * Expected Result:
          */
         [TestMethod]
-        public void DeleteBtnOnClick2()
+        public void DeleteBtn_OnClickTest2()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
-            scientificView.NumBtn_OnClick(scientificView.Num2Btn, null); // 2
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.DeleteBtn_OnClick(null, null); // Delete
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
+                scientificView.NumBtn_OnClick(scientificView.Num2Btn, null); // 2
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.DeleteBtn_OnClick(null, null); // Delete
+                scientificView.UpdateGui();
 
-            string actualExpression = scientificView.ExpressionTb.Content.ToString();
-            string actualResult = scientificView.ResultTb.Content.ToString();
+                string actualExpression = scientificView.ExpressionTb.Content.ToString();
+                string actualResult = scientificView.ResultTb.Content.ToString();
 
-            Assert.AreEqual("5 * ", actualExpression);
-            Assert.AreEqual("", actualResult);
+                Assert.AreEqual("5 * ", actualExpression);
+                Assert.AreEqual("", actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -635,20 +865,27 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 
          */
         [TestMethod]
-        public void CEBtnOnClick()
+        public void CEBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
-            scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
-            scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CEBtn_OnClick(null, null); // CE
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num5Btn, null); // 5
+                scientificView.OperationBtn_OnClick(scientificView.MulBtn, null); // *
+                scientificView.NumBtn_OnClick(scientificView.Num6Btn, null); // 6
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CEBtn_OnClick(null, null); // CE
+                scientificView.UpdateGui();
 
-            string actualExpression = scientificView.ExpressionTb.Content.ToString();
-            string actualResult = scientificView.ResultTb.Content.ToString();
+                string actualExpression = scientificView.ExpressionTb.Content.ToString();
+                string actualResult = scientificView.ResultTb.Content.ToString();
 
-            Assert.AreEqual("", actualExpression);
-            Assert.AreEqual("", actualResult);
+                Assert.AreEqual("", actualExpression);
+                Assert.AreEqual("", actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -663,19 +900,26 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 2
          */
         [TestMethod]
-        public void CBtnOnClick1()
+        public void CBtn_OnClickTest1()
         {
-            scientificView.NumBtn_OnClick(scientificView.Num8Btn, null); // 8
-            scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
-            scientificView.NumBtn_OnClick(scientificView.Num4Btn, null); // 4
-            scientificView.EqualBtn_OnClick(null, null); // =
-            scientificView.CBtn_OnClick(null, null); // C (clean)
-            scientificView.UpdateGui();
+            try
+            {
+                scientificView.NumBtn_OnClick(scientificView.Num8Btn, null); // 8
+                scientificView.OperationBtn_OnClick(scientificView.DivBtn, null); // /
+                scientificView.NumBtn_OnClick(scientificView.Num4Btn, null); // 4
+                scientificView.EqualBtn_OnClick(null, null); // =
+                scientificView.CBtn_OnClick(null, null); // C (clean)
+                scientificView.UpdateGui();
 
-            string actualExpression = scientificView.ExpressionTb.Content.ToString();
-            string actualResult = scientificView.ResultTb.Content.ToString();
-            Assert.AreEqual("", actualExpression);
-            Assert.AreEqual("2", actualResult);
+                string actualExpression = scientificView.ExpressionTb.Content.ToString();
+                string actualResult = scientificView.ResultTb.Content.ToString();
+                Assert.AreEqual("", actualExpression);
+                Assert.AreEqual("2", actualResult);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
         }
         #endregion
 
@@ -690,7 +934,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: -1
          */
         [TestMethod]
-        public void FunctionBtnTest1()
+        public void FunctionBtn_OnClickTest1()
         {
             try
             {
@@ -731,7 +975,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 1
          */
         [TestMethod]
-        public void FunctionBtnTest2()
+        public void FunctionBtn_OnClickTest2()
         {
             try
             {
@@ -774,7 +1018,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 0
          */
         [TestMethod]
-        public void FunctionBtnTest3()
+        public void FunctionBtn_OnClickTest3()
         {
             try
             {
@@ -817,7 +1061,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 0.428571428571428
          */
         [TestMethod]
-        public void FunctionBtnTest4()
+        public void FunctionBtn_OnClickTest4()
         {
             try
             {
@@ -846,13 +1090,13 @@ namespace CalculatorTests.Boundary_Tests
          * Testing the ASB function,
          * by pressing this sequence of buttons:
          * 
-         * abs( → - → 5 → * → 2 → ) → =
+         * abs( → - → 5 → + → 2 → ) → =
          * 
          * Expected Expression: abs( -5 + 2 )
          * Expected Result: 3
          */
         [TestMethod]
-        public void FunctionBtnTest5()
+        public void FunctionBtn_OnClickTest5()
         {
             try
             {
@@ -886,7 +1130,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 3
          */
         [TestMethod]
-        public void FunctionBtnTest6()
+        public void FunctionBtn_OnClickTest6()
         {
             try
             {
@@ -922,7 +1166,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 3.197224577336
          */
         [TestMethod]
-        public void FunctionBtnTest7()
+        public void FunctionBtn_OnClickTest7()
         {
             try
             {
@@ -955,7 +1199,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 125
          */
         [TestMethod]
-        public void FunctionBtnTest8()
+        public void FunctionBtn_OnClickTest8()
         {
             try
             {
@@ -990,7 +1234,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 100000
          */
         [TestMethod]
-        public void FunctionBtnTest9()
+        public void FunctionBtn_OnClickTest9()
         {
             try
             {
@@ -1020,7 +1264,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 36
          */
         [TestMethod]
-        public void FunctionBtnTest10()
+        public void FunctionBtn_OnClickTest10()
         {
             try
             {
@@ -1055,7 +1299,7 @@ namespace CalculatorTests.Boundary_Tests
          * Expected Result: 5
          */
         [TestMethod]
-        public void FunctionBtnTest11()
+        public void FunctionBtn_OnClickTest11()
         {
             try
             {
@@ -1084,35 +1328,48 @@ namespace CalculatorTests.Boundary_Tests
         #region RadDegBtn_Click Event Tests
         /*
          * This test checks the functionality of the Radian/Degree button
+         * Old Data: Calculator's IsDegree -> True (Started as Degree)
          * 
-         * First we check the current state of IsDegree in the calculator 
-         * after that we press the button and check if it changed the
-         * calculator's IsDegree state and the content of the button.
+         * Then Checks if the value is inverted and the content is changed
+         * accordingly
          */
         [TestMethod]
-        public void RadDegBtnTest1()
+        public void RadDegBtn_ClickTest1()
         {
             try
             {
-                // Old state of IsDegree:
-                // True -> started as Degree
-                // False -> started as Radian
-                bool oldIsDegree = CalculatorControl.Calculator.IsDegree;
+                // Started as Degree
+                Calculator.IsDegree = true;
 
                 scientificView.RadDegBtn_Click(scientificView.RadDegBtn, null);
 
-                if (oldIsDegree)
-                {
-                    //Check the change from degree to radian in the calculator
-                    Assert.IsFalse(CalculatorControl.Calculator.IsDegree);
-                    Assert.AreEqual("Radian", scientificView.RadDegBtn.Content);
-                }
-                else
-                {
-                    //Check the change from radian to degree in the calculator
-                    Assert.IsTrue(CalculatorControl.Calculator.IsDegree);
-                    Assert.AreEqual("Degree", scientificView.RadDegBtn.Content);
-                }
+                Assert.IsFalse(Calculator.IsDegree);
+                Assert.AreEqual("Radian", scientificView.RadDegBtn.Content);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        /*
+         * This test checks the functionality of the Radian/Degree button
+         * Old Data: Calculator's IsDegree -> False (Started as Radian)
+         * 
+         * Then Checks if the value is inverted and the content is changed
+         * accordingly
+         */
+        [TestMethod]
+        public void RadDegBtn_ClickTest2()
+        {
+            try
+            {
+                // Started as Radian
+                Calculator.IsDegree = false;
+
+                scientificView.RadDegBtn_Click(scientificView.RadDegBtn, null);
+
+                Assert.IsTrue(Calculator.IsDegree);
+                Assert.AreEqual("Degree", scientificView.RadDegBtn.Content);
             }
             catch (Exception e)
             {
