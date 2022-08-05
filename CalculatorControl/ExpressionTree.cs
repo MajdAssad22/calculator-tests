@@ -259,7 +259,7 @@ namespace CalculatorControl
 
         public override string ToString()
         {
-            return $"{Expression}";
+            return $"{Expression} = {Result}";
         }
 
         private void AddBranch(Stack<string> stC, Stack<Node> stN)
