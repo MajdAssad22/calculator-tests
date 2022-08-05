@@ -29,7 +29,6 @@ namespace CalculatorTests.Boundary_Tests
         [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
-            Calculator.Mode = CalculatorParams.CalculatorModes.Programmer;
             programmerView = new ProgrammerView();
         }
 
@@ -37,6 +36,7 @@ namespace CalculatorTests.Boundary_Tests
         [TestInitialize()]
         public void MyTestInitialize()
         {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Programmer;
             programmerView.CEBtn_OnClick(null, null);
             programmerView.ChangeBaseBtn_OnClick(programmerView.DecBtn, null);
         }

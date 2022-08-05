@@ -31,7 +31,6 @@ namespace CalculatorTests.Boundary_Tests
         [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
-            Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
             basicView = new BasicView();
         }
 
@@ -39,6 +38,7 @@ namespace CalculatorTests.Boundary_Tests
         [TestInitialize]
         public void TestInitialize()
         {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
             basicView.CEBtn_OnClick(null, null);
         }
         #endregion

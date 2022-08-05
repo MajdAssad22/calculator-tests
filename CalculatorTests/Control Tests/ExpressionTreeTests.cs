@@ -11,8 +11,7 @@ namespace CalculatorTests
     {
         private static ExpressionTree expressionTree;
 
-        #region Additional test attributes
-
+        #region Test Attributes
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -26,8 +25,6 @@ namespace CalculatorTests
             }
         }
 
-        #endregion
-
         [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
@@ -36,8 +33,15 @@ namespace CalculatorTests
             Calculator.IsDegree = true;
         }
 
-        #region Constructor Tests
+        // TestInitialize to run code before running each test 
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
+        }
+        #endregion
 
+        #region Constructor Tests
         [TestMethod]
         public void ConstuctorTest1()
         {
@@ -80,11 +84,9 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-
         #endregion
 
         #region BuildTree Function Tests
-
         [TestMethod]
         public void BuildTreeTest1()
         {
@@ -619,7 +621,6 @@ namespace CalculatorTests
         #endregion
 
         #region Evaluate Function Tests
-
         [TestMethod]
         public void EvaluateTest1()
         {
@@ -812,11 +813,9 @@ namespace CalculatorTests
 
             // Expecting Exception of type ArgumentException
         }
-
         #endregion
 
         #region AddBranch Funciton Tests
-
         [TestMethod]
         public void AddBranchTest1()
         {
@@ -847,11 +846,9 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-
         #endregion
 
         #region ExecuteFunctions Funciton Tests
-
         [TestMethod]
         public void ExecuteFunctionsTest1()
         {
@@ -896,7 +893,6 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-
         #endregion
     }
 }

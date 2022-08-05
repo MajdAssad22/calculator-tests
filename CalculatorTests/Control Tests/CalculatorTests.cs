@@ -7,8 +7,29 @@ namespace CalculatorTests
     [TestClass]
     public class CalculatorTests
     {
-        #region Calculate Function Tests
+        #region Test Attributes
+        private TestContext testContextInstance;
+        public TestContext TestContext
+        {
+            get
+            {
+                return testContextInstance;
+            }
+            set
+            {
+                testContextInstance = value;
+            }
+        }
 
+        // TestInitialize to run code before running each test 
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Basic;
+        }
+        #endregion
+
+        #region Calculate Function Tests
         [TestMethod]
         public void CalculateTest1()
         {
@@ -32,11 +53,9 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-
         #endregion
 
         #region Format Function Tests
-
         [TestMethod]
         public void FormatTest1()
         {
@@ -76,7 +95,6 @@ namespace CalculatorTests
                 Assert.Fail(e.Message);
             }
         }
-
         #endregion
     }
 }

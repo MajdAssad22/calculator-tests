@@ -29,7 +29,6 @@ namespace CalculatorTests.Boundary_Tests
         [ClassInitialize()]
         public static void TestsClassInitialize(TestContext testContext)
         {
-            Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
             scientificView = new ScientificView();
         }
 
@@ -37,6 +36,8 @@ namespace CalculatorTests.Boundary_Tests
         [TestInitialize()]
         public void MyTestInitialize()
         {
+            Calculator.Mode = CalculatorParams.CalculatorModes.Scientific;
+            Calculator.IsDegree = true;
             scientificView.CEBtn_OnClick(null, null);
         }
         #endregion
@@ -939,7 +940,7 @@ namespace CalculatorTests.Boundary_Tests
             try
             {
                 // If in degree change to radain
-                if (scientificView.RadDegBtn.Content.ToString() == "Degree")
+                if (Calculator.IsDegree)
                 {
                     scientificView.RadDegBtn_Click(scientificView.RadDegBtn, null);
                 }
@@ -980,7 +981,7 @@ namespace CalculatorTests.Boundary_Tests
             try
             {
                 // if in radian change to degree
-                if (scientificView.RadDegBtn.Content.ToString() == "Radian")
+                if (!Calculator.IsDegree)
                 {
                     scientificView.RadDegBtn_Click(scientificView.RadDegBtn, null);
                 }
@@ -1023,7 +1024,7 @@ namespace CalculatorTests.Boundary_Tests
             try
             {
                 // if in degree change to radian
-                if (scientificView.RadDegBtn.Content.ToString() == "Degree")
+                if (Calculator.IsDegree)
                 {
                     scientificView.RadDegBtn_Click(scientificView.RadDegBtn, null);
                 }
