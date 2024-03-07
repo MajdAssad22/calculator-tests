@@ -13,7 +13,6 @@ namespace CalculatorTests
         private static CalculatorWindow calculatorWindow;
 
         #region Additional test attributes
-
         private TestContext testContextInstance;
         public TestContext TestContext
         {
@@ -27,9 +26,6 @@ namespace CalculatorTests
             }
         }
 
-        #endregion
-
-        #region Additional test attributes
         // TestInitialize to run code before running each test 
         [TestInitialize()]
         public void MyTestInitialize()

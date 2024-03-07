@@ -57,6 +57,7 @@
     <Compile Include="Boundary Tests\ProgrammerViewTests.cs" />
     <Compile Include="Boundary Tests\ScientificViewTests.cs" />
     <Compile Include="Control Tests\CalculatorLogicTest.cs" />
+    <Compile Include="Extra Tests\FinalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Control Tests\ExpressionTreeTests.cs" />
     <Compile Include="Control Tests\CalculatorTests.cs" />
